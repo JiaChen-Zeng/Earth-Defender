@@ -19,6 +19,7 @@ const SCREEN -> 60000
 
 const ERROR_ASSERT -> 100000
 const ERROR_ARRAY_INDEX_OUT_OF_BOUNDS -> 100001
+const ERROR_POINT_OUT_OF_SCREEN -> 100002
 
 const SCREEN_WIDTH -> 100
 const SCREEN_HEIGHT -> 100
@@ -57,6 +58,8 @@ def setMemory(_start, length, value)
 		memory[_start + i] -> value
 		i -> i + 1
 
+# For constants, use Javascript
+# rgb = (red, green, blue) => (Math.floor(red * 99 / 255) * 10000) + (Math.floor(green * 99 / 255) * 100) + Math.floor((blue * 99 / 255))
 def rgb(red, green, blue)
 	out -> (red * 99 / 255 * 10000) + (green * 99 / 255 * 100) + (blue * 99 / 255)
 
@@ -65,8 +68,11 @@ def keyPressed(key)
 	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
 
 def assert(condition)
+	assertEx(condition, ERROR_ASSERT)
+
+def assertEx(condition, error)
 	if condition = false
-		throwError(ERROR_ASSERT)
+		throwError(error)
 
 def debug(condition)
 	drawPixel(0, 0, cond(condition, GREEN, RED))

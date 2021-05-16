@@ -17,7 +17,8 @@ const STATE_BATTLE -> 2
 const STATE_GAMEOVER -> 3
 const _state -> 0
 
-const GOLD_INITIAL -> 1000
+const GOLD_INITIAL -> 10
+const GOLD_MAX -> 50
 const _gold -> 1
 
 const _selectedTowerIndex -> 2
@@ -104,6 +105,34 @@ def draw()
 
 	if memory[_state] = STATE_BATTLE
 		drawLine(20, 20, 30, 80, randomColor())
+
+	drawUI()
+
+def drawUI()
+	drawGoldBar()
+
+const GOLD_BAR_X -> SCREEN_WIDTH - 8
+const GOLD_BAR_Y -> 30
+const GOLD_BAR_WIDTH -> 7
+const GOLD_BAR_HEIGHT -> 37
+const GOLD_BAR_COLOR -> 938824 # rgb(217, 206, 56)
+def drawGoldBar()
+	drawRectOutline(GOLD_BAR_X, GOLD_BAR_Y, GOLD_BAR_WIDTH, GOLD_BAR_HEIGHT, GOLD_BAR_COLOR)
+	i -> 0
+	while i < GOLD_INDICATOR_COUNT
+		drawGoldIndicator(i)
+		i -> i + 1
+
+const GOLD_INDICATOR_COUNT -> 5
+const GOLD_INDICATOR_WIDTH -> GOLD_BAR_WIDTH - 1
+const GOLD_INDICATOR_HEIGHT -> 6
+const GOLD_INDICATOR_X -> GOLD_BAR_X + 1
+const GOLD_INDICATOR_Y -> GOLD_BAR_Y + GOLD_BAR_HEIGHT - GOLD_INDICATOR_HEIGHT - 1
+const GOLD_INDICATOR_SPACE -> 1
+def drawGoldIndicator(index) # index increase from bottom to top
+	level -> (memory[_gold] / GOLD_INDICATOR_COUNT) - 1 + (mod(memory[_gold], GOLD_INDICATOR_COUNT) > index)
+	if -1 < level
+		drawRect(GOLD_INDICATOR_X, GOLD_INDICATOR_Y - ((GOLD_INDICATOR_SPACE + GOLD_INDICATOR_HEIGHT) * index), GOLD_INDICATOR_WIDTH, GOLD_INDICATOR_HEIGHT, memory[_colors + level])
 
 def drawTowers()
 	i -> 0

@@ -12,9 +12,9 @@ def flush()
 
 def fill(color)
 	y -> 0
-	while y < 100
+	while y < SCREEN_HEIGHT
 		x -> 0
-		while x < 100
+		while x < SCREEN_WIDTH
 			drawPixel(x, y, color)
 			x -> x + 1
 		y -> y + 1
@@ -23,9 +23,11 @@ def clear()
 	fill(999999)
 
 def offset(x, y)
-	out -> (y * 100) + x
+	out -> (y * SCREEN_WIDTH) + x
 
 def drawPixel(x, y, color)
+	assertEx(and(-1 < x, x < SCREEN_WIDTH), ERROR_POINT_OUT_OF_SCREEN)
+	assertEx(and(-1 < y, y < SCREEN_HEIGHT), ERROR_POINT_OUT_OF_SCREEN)
 	memory[SCREEN + offset(x, y)] -> color
 
 def drawRect(x, y, width, height, color)
@@ -36,6 +38,21 @@ def drawRect(x, y, width, height, color)
 			drawPixel(x + offsetX, y + offsetY, color)
 			offsetX -> offsetX + 1
 		offsetY -> offsetY + 1
+
+def drawRectOutline(x, y, width, height, color)
+	offsetX -> 0
+	while offsetX < width
+		drawPixel(x + offsetX, y, color)
+		drawPixel(x + offsetX, y + height, color)
+		offsetX -> offsetX + 1
+
+	offsetY -> 0
+	while offsetY < height
+		drawPixel(x, y + offsetY, color)
+		drawPixel(x + width, y + offsetY, color)
+		offsetY -> offsetY + 1
+	
+	drawPixel(x + width, y + height, color)
 
 def drawCircle(x, y, radius, color)
 	offsetY -> -radius

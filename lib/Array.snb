@@ -8,6 +8,5 @@ def Array(this, length, elemSize)
 	memory[this + Array_elemSize] -> elemSize
 
 def Array_at(this, index)
-	if or(index < 0, memory[this + Array_length] <= index)
-		throwError(ERROR_ARRAY_INDEX_OUT_OF_BOUNDS)
+	assertEx(and(-1 < index, index < memory[this + Array_length]), ERROR_ARRAY_INDEX_OUT_OF_BOUNDS)
 	out -> this + Array_elem + (memory[this + Array_elemSize] * index)
