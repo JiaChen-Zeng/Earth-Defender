@@ -1,0 +1,5 @@
+const _lib_var -> 19000
+
+include "lang.snb"
+include "graphics.snb"
+include "math.snb"

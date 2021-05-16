@@ -1,0 +1,68 @@
+const _graphics_var -> _lib_var + 200 # 200 vars
+
+const RED -> 990000
+const GREEN -> 009900
+const BLUE -> 000099
+
+def setManualFlush(manualFlush)
+	memory[55001] -> manualFlush
+
+def flush()
+	memory[55000] -> 1
+
+def fill(color)
+	y -> 0
+	while y < 100
+		x -> 0
+		while x < 100
+			drawPixel(x, y, color)
+			x -> x + 1
+		y -> y + 1
+
+def clear()
+	fill(999999)
+
+def offset(x, y)
+	out -> (y * 100) + x
+
+def drawPixel(x, y, color)
+	memory[SCREEN + offset(x, y)] -> color
+
+def drawRect(x, y, width, height, color)
+	offsetY -> 0
+	while offsetY < height
+		offsetX -> 0
+		while offsetX < width
+			drawPixel(x + offsetX, y + offsetY, color)
+			offsetX -> offsetX + 1
+		offsetY -> offsetY + 1
+
+def drawCircle(x, y, radius, color)
+	offsetY -> -radius
+	while offsetY <= radius
+		offsetX -> -radius
+		while offsetX <= radius
+			if ((offsetX * offsetX) + (offsetY * offsetY)) <= (radius * radius + 1)
+				drawPixel(x + offsetX, y + offsetY, color)
+			offsetX -> offsetX + 1
+		offsetY -> offsetY + 1
+
+def drawLine(fromX, fromY, toX, toY, color)
+	offsetX -> 0
+	offsetY -> 0
+	if abs(toY - fromY) <= abs(toX - fromX)
+		incX -> cond(fromX < toX, 1, -1)
+		while (fromX + offsetX) != toX
+			drawPixel(fromX + offsetX, fromY + offsetY, color)
+			offsetX -> offsetX + incX
+			offsetY -> (toY - fromY) * offsetX / (toX - fromX)
+
+	if abs(toX - fromX) < abs(toY - fromY)
+		incY -> cond(fromY < toY, 1, -1)
+		while (fromY + offsetY) != toY
+			drawPixel(fromX + offsetX, fromY + offsetY, color)
+			offsetY -> offsetY + incY
+			offsetX -> (toX - fromX) * offsetY / (toY - fromY)
+
+def randomColor()
+	out -> random(999999)

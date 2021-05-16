@@ -1,0 +1,67 @@
+include "Array.snb"
+
+const _lang_var -> _lib_var # 200 vars
+const _keyPressedInternal -> _lang_var # 0 ~ 9
+
+const _key_begin -> 50000
+const MOUSE_X -> 50000
+const MOUSE_Y -> 50001
+const MOUSE_LEFT -> 50002
+const MOUSE_RIGHT -> 50003
+const KEY_UP -> 50004
+const KEY_DOWN -> 50005
+const KEY_LEFT -> 50006
+const KEY_RIGHT -> 50007
+const KEY_SPACE -> 50008
+const KEY_ENTER -> 50009
+
+const SCREEN -> 60000
+
+const ERROR_ARRAY_INDEX_OUT_OF_BOUNDS -> 100000
+
+const SCREEN_WIDTH -> 100
+const SCREEN_HEIGHT -> 100
+
+const true -> 1
+const false -> 0
+
+def and(a, b)
+	out -> 0
+	if a = 0
+		out -> 0
+	if a != 0
+		if b = 0
+			out -> 0
+		if b != 0
+			out -> b
+
+def or(a, b)
+	out -> 0
+	if a = 0
+		if b = 0
+			out -> 0
+		if b != 0
+			out -> b
+	if a != 0
+		out -> a
+
+def cond(condition, then, else)
+	out -> else
+	if condition
+		out -> then
+
+def rgb(red, green, blue)
+	out -> (red * 99 / 255 * 10000) + (green * 99 / 255 * 100) + (blue * 99 / 255)
+
+def keyPressed(key)
+	out -> and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key])
+	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
+
+def debug(condition)
+	drawPixel(0, 0, cond(condition, GREEN, RED))
+
+def debug2(condition)
+	drawPixel(SCREEN_WIDTH - 1, 0, cond(condition, GREEN, RED))
+
+def throwError(error)
+	memory[ERROR_ARRAY_INDEX_OUT_OF_BOUNDS] -> 0

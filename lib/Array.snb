@@ -1,0 +1,13 @@
+const Array_size -> 2
+const Array_length -> 0
+const Array_elemSize -> 1
+const Array_elem -> 2
+
+def Array(this, length, elemSize)
+	memory[this + Array_length] -> length
+	memory[this + Array_elemSize] -> elemSize
+
+def Array_at(this, index)
+	if or(index < 0, memory[this + Array_length] <= index)
+		throwError(ERROR_ARRAY_INDEX_OUT_OF_BOUNDS)
+	out -> this + Array_elem + (memory[this + Array_elemSize] * index)

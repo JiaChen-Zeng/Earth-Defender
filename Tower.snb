@@ -1,0 +1,13 @@
+const Tower_size -> 2
+const Tower_index -> 0
+const Tower_level -> 1
+
+const TOWER_WIDTH -> LANE_WIDTH
+const TOWER_HEIGHT -> 10
+
+def Tower(this, index, level)
+	memory[this + Tower_index] -> index
+	memory[this + Tower_level] -> level
+
+def Tower_draw(this)
+	drawRect(getLaneX(memory[this + Tower_index]), SCREEN_HEIGHT - TOWER_HEIGHT, TOWER_WIDTH, TOWER_HEIGHT, memory[_colors + memory[this + Tower_level]])

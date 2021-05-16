@@ -1,0 +1,9 @@
+const LANE_COUNT -> 7
+const LANE_MARGIN -> 1
+const LANE_WIDTH -> 12
+# const LANE_WIDTH -> (SCREEN_WIDTH - (LANE_MARGIN * (LANE_COUNT + 1))) / LANE_COUNT
+def getLaneX(index)
+	out -> LANE_MARGIN + ((LANE_WIDTH + LANE_MARGIN) * index)
+
+def getLaneMiddleX(index)
+	out -> getLaneX(index) + (LANE_WIDTH / 2)

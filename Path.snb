@@ -1,0 +1,22 @@
+const Path_size -> 6
+const Path_fromX -> 0
+const Path_fromY -> 1
+const Path_toX -> 2
+const Path_toY -> 3
+const Path_fromLane -> 4
+const Path_toLane -> 5
+
+const PATH_FROM_Y -> 20
+
+def Path(this, fromLane, toLane, height)
+	memory[this + Path_fromLane] -> fromLane
+	memory[this + Path_toLane] -> toLane
+	memory[this + Path_fromX] -> getLaneMiddleX(fromLane)
+	memory[this + Path_toX] -> getLaneMiddleX(toLane)
+	memory[this + Path_fromY] -> PATH_FROM_Y
+	memory[this + Path_toY] -> PATH_FROM_Y + height
+
+def Path_draw(this)
+	drawLine(memory[this + Path_fromX], memory[this + Path_fromY], memory[this + Path_toX], memory[this + Path_toY], 008877)
+
+# def Path_getX

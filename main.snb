@@ -1,0 +1,119 @@
+# Naming Convention:
+# - <var>: normal variable
+# - <_var>: variable for memory address pointer
+# - <Class_property>: property offset for Class
+
+include "lib/core.snb"
+include "utils.snb"
+include "Tower.snb"
+include "Enemy.snb"
+include "Path.snb"
+
+setManualFlush(true)
+
+const STATE_INITIAL -> 0
+const STATE_READY -> 1
+const STATE_BATTLE -> 2
+const STATE_GAMEOVER -> 3
+const _state -> 0
+
+const GOLD_INITIAL -> 1000
+const _gold -> 1
+
+const _selectedTowerIndex -> 2
+
+const _towers -> 1000
+const _enemys -> _towers + 1000
+const _paths -> _enemys + 1000
+
+const LEVEL_MAX -> 9 # 0-indexed
+# light -> dark
+# blue -> green -> orange -> red -> purple
+const _colors -> _paths + 1000
+memory[_colors] -> rgb(100, 145, 217)
+memory[_colors + 1] -> rgb(112, 224, 161)
+memory[_colors + 2] -> rgb(227, 189, 107)
+memory[_colors + 3] -> rgb(235, 131, 117)
+memory[_colors + 4] -> rgb(235, 113, 224)
+memory[_colors + 5] -> rgb(15, 82, 189)
+memory[_colors + 6] -> rgb(30, 148, 81)
+memory[_colors + 7] -> rgb(191, 136, 17)
+memory[_colors + 8] -> rgb(168, 42, 25)
+memory[_colors + 9] -> rgb(173, 14, 159)
+
+main()
+
+def main()
+	enterInitial()
+	while true
+		update()
+		draw()
+		debug(0 < memory[_gold])
+		flush()
+
+def update()
+	if memory[_state] = STATE_INITIAL
+		if memory[KEY_ENTER]
+			enterReady()
+
+	if memory[_state] = STATE_READY
+		if keyPressed(KEY_LEFT)
+			memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
+		if keyPressed(KEY_RIGHT)
+			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT - 1)
+		if and(keyPressed(KEY_SPACE), 0 < memory[_gold])
+			_towerLevel -> Array_at(_towers, memory[_selectedTowerIndex]) + Tower_level
+			if memory[_towerLevel] + 1 <= LEVEL_MAX
+				memory[_gold] -> memory[_gold] - 1
+				memory[_towerLevel] -> memory[_towerLevel] + 1
+
+		if and(keyPressed(KEY_ENTER), memory[_gold] = 0)
+			enterBattle()
+
+	if memory[_state] = STATE_BATTLE
+		debug(memory[_gold] = 10)
+
+def enterInitial()
+	memory[_state] -> STATE_INITIAL
+	memory[_gold] -> GOLD_INITIAL
+	initTowers()
+
+def enterReady()
+	memory[_state] -> STATE_READY
+	memory[_selectedTowerIndex] -> 0
+
+def enterBattle()
+	memory[_state] -> STATE_BATTLE
+
+def draw()
+	clear()
+	drawTowers()
+	if memory[_state] = STATE_INITIAL
+		Enemy(_enemys, 10, -1)
+		Enemy_draw(_enemys)
+
+	if memory[_state] = STATE_READY
+		drawTowerSelector()
+		Path(_paths, 1, 2, 30)
+		Path_draw(_paths)
+
+	if memory[_state] = STATE_BATTLE
+		drawLine(20, 20, 30, 80, randomColor())
+
+def drawTowers()
+	i -> 0
+	while i < memory[_towers + Array_length]
+		Tower_draw(Array_at(_towers, i))
+		i -> i + 1
+
+const TOWER_SELECTOR_Y -> SCREEN_HEIGHT - 20
+const TOWER_SELECTOR_RADIUS -> 3
+def drawTowerSelector()
+	drawCircle(getLaneMiddleX(memory[_selectedTowerIndex]), TOWER_SELECTOR_Y, TOWER_SELECTOR_RADIUS, 777777)
+
+def initTowers()
+	Array(_towers, LANE_COUNT, Tower_size)
+	i -> 0
+	while i < LANE_COUNT
+		Tower(Array_at(_towers, i), i, 0)
+		i -> i + 1
