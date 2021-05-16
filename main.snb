@@ -27,8 +27,8 @@ const _enemyCount -> 3
 
 const _tempArray -> 1000
 const _towers -> _tempArray + 1000
-const _enemys -> _towers + 1000
-const _paths -> _enemys + 1000
+const _enemies -> _towers + 1000
+const _paths -> _enemies + 1000
 
 const LEVEL_MAX -> 9 # 0-indexed
 # light -> dark
@@ -57,7 +57,7 @@ def main()
 
 def update()
 	if memory[_state] = STATE_INITIAL
-		if memory[KEY_ENTER]
+		if keyPressed(KEY_ENTER)
 			enterReady()
 
 	if memory[_state] = STATE_READY
@@ -71,11 +71,18 @@ def update()
 				memory[_gold] -> memory[_gold] - 1
 				memory[_towerLevel] -> memory[_towerLevel] + 1
 
-		if and(keyPressed(KEY_ENTER), memory[_gold] = 0)
+		if keyPressed(KEY_ENTER)
 			enterBattle()
 
 	if memory[_state] = STATE_BATTLE
-		debug(memory[_gold] = 10)
+		updateEnemies()
+		updateTowers()
+
+def updateEnemies()
+	# TODO
+
+def updateTowers()
+	# TODO
 
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
@@ -91,20 +98,20 @@ def enterReady()
 
 def enterBattle()
 	memory[_state] -> STATE_BATTLE
+	initEnemies()
 
 def draw()
 	clear()
 	drawTowers()
 	if memory[_state] = STATE_INITIAL
-		Enemy(_enemys, 10, -1)
-		Enemy_draw(_enemys)
 
 	if memory[_state] = STATE_READY
 		drawTowerSelector()
 		drawPaths()
 
 	if memory[_state] = STATE_BATTLE
-		drawLine(20, 20, 30, 80, randomColor())
+		drawPaths()
+		drawEnemies()
 
 	drawUI()
 
@@ -151,6 +158,12 @@ def drawPaths()
 		Path_draw(Array_at(_paths, i))
 		i -> i + 1
 
+def drawEnemies()
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		Enemy_draw(Array_at(_enemies, i))
+		i -> i + 1
+
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
 	i -> 0
@@ -175,4 +188,10 @@ def initPaths()
 				Path(Array_at(_paths, i), laneIndex, random(LANE_COUNT), 0, 2 + random(SPOT_RANGE))
 				newPathSet -> true
 		i -> i + 1
-	
+
+def initEnemies()
+	Array(_enemies, memory[_enemyCount], Enemy_size)
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		Enemy(Array_at(_enemies, i), 1, Array_at(_paths, i))
+		i -> i + 1

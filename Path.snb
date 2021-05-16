@@ -8,15 +8,11 @@ const Path_toLane -> 5
 const Path_fromSpot -> 6
 const Path_toSpot -> 7
 
-const SPOT_TOP -> 5
-const SPOT_SPACE -> 10
-const SPOT_RANGE -> 4
-
 def Path(this, fromLane, toLane, fromSpot, toSpot)
 	memory[this + Path_fromX] -> getLaneMiddleX(fromLane)
 	memory[this + Path_toX] -> getLaneMiddleX(toLane)
-	memory[this + Path_fromY] -> SPOT_TOP + (fromSpot * SPOT_SPACE)
-	memory[this + Path_toY] -> SPOT_TOP + (toSpot * SPOT_SPACE)
+	memory[this + Path_fromY] -> getSpot(fromSpot)
+	memory[this + Path_toY] -> getSpot(toSpot)
 
 	memory[this + Path_fromLane] -> fromLane
 	memory[this + Path_toLane] -> toLane

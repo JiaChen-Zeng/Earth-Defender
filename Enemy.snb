@@ -4,14 +4,14 @@ const Enemy__path -> 1
 const Enemy_x -> 2
 const Enemy_y -> 3
 
-const ENEMY_RADIUS -> LANE_WIDTH / 2
+const ENEMY_RADIUS -> LANE_WIDTH / 2 - 1
 
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> life
 	memory[this + Enemy__path] -> _path
-	memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
-	# memory[this + Enemy_x] -> _path.x
-	memory[this + Enemy_y] -> 40
+	# memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
+	memory[this + Enemy_x] -> memory[_path + Path_fromX]
+	memory[this + Enemy_y] -> memory[_path + Path_fromY]
 
 def Enemy_draw(this)
 	drawCircle(memory[this + Enemy_x], memory[this + Enemy_y], ENEMY_RADIUS, 440000)

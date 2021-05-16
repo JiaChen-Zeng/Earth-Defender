@@ -7,3 +7,9 @@ def getLaneX(index)
 
 def getLaneMiddleX(index)
 	out -> getLaneX(index) + (LANE_WIDTH / 2)
+
+const SPOT_TOP -> 8
+const SPOT_SPACE -> 10
+const SPOT_RANGE -> 4
+def getSpot(index)
+	out -> SPOT_TOP + (index * SPOT_SPACE)
