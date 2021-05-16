@@ -22,7 +22,10 @@ const _gold -> 1
 
 const _selectedTowerIndex -> 2
 
-const _towers -> 1000
+const _enemyCount -> 3
+
+const _tempArray -> 1000
+const _towers -> _tempArray + 1000
 const _enemys -> _towers + 1000
 const _paths -> _enemys + 1000
 
@@ -63,7 +66,7 @@ def update()
 			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT - 1)
 		if and(keyPressed(KEY_SPACE), 0 < memory[_gold])
 			_towerLevel -> Array_at(_towers, memory[_selectedTowerIndex]) + Tower_level
-			if memory[_towerLevel] + 1 <= LEVEL_MAX
+			if (memory[_towerLevel] + 1) <= LEVEL_MAX
 				memory[_gold] -> memory[_gold] - 1
 				memory[_towerLevel] -> memory[_towerLevel] + 1
 
@@ -76,11 +79,14 @@ def update()
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
 	memory[_gold] -> GOLD_INITIAL
+	memory[_enemyCount] -> 3
 	initTowers()
 
 def enterReady()
 	memory[_state] -> STATE_READY
 	memory[_selectedTowerIndex] -> 0
+	memory[_enemyCount] -> memory[_enemyCount] + 1
+	initPaths()
 
 def enterBattle()
 	memory[_state] -> STATE_BATTLE
@@ -94,8 +100,7 @@ def draw()
 
 	if memory[_state] = STATE_READY
 		drawTowerSelector()
-		Path(_paths, 1, 2, 30)
-		Path_draw(_paths)
+		drawPaths()
 
 	if memory[_state] = STATE_BATTLE
 		drawLine(20, 20, 30, 80, randomColor())
@@ -111,9 +116,34 @@ const TOWER_SELECTOR_RADIUS -> 3
 def drawTowerSelector()
 	drawCircle(getLaneMiddleX(memory[_selectedTowerIndex]), TOWER_SELECTOR_Y, TOWER_SELECTOR_RADIUS, 777777)
 
+def drawPaths()
+	i -> 0
+	while i < memory[_paths + Array_length]
+		Path_draw(Array_at(_paths, i))
+		i -> i + 1
+
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
 	i -> 0
 	while i < LANE_COUNT
 		Tower(Array_at(_towers, i), i, 0)
 		i -> i + 1
+
+def initPaths()
+	Array(_paths, memory[_enemyCount], Path_size)
+
+	setMemory(_tempArray, memory[_paths + Array_length], false) # true for existence of path in <index>-nd lane
+	i -> 0
+	while i < memory[_paths + Array_length]
+		newPathSet -> false
+		while newPathSet = false
+			laneIndex -> random(LANE_COUNT)
+			# assert(and(-1 < laneIndex, true))
+			if memory[_tempArray + laneIndex] = false
+				memory[_tempArray + laneIndex] -> true
+				# temp -> random(LANE_COUNT)
+				# assert(and(0 <= temp, temp <= 6))
+				Path(Array_at(_paths, i), laneIndex, random(LANE_COUNT), 0, 2 + random(SPOT_RANGE))
+				newPathSet -> true
+		i -> i + 1
+	

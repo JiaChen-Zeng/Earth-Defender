@@ -17,7 +17,8 @@ const KEY_ENTER -> 50009
 
 const SCREEN -> 60000
 
-const ERROR_ARRAY_INDEX_OUT_OF_BOUNDS -> 100000
+const ERROR_ASSERT -> 100000
+const ERROR_ARRAY_INDEX_OUT_OF_BOUNDS -> 100001
 
 const SCREEN_WIDTH -> 100
 const SCREEN_HEIGHT -> 100
@@ -50,12 +51,22 @@ def cond(condition, then, else)
 	if condition
 		out -> then
 
+def setMemory(_start, length, value)
+	i -> 0
+	while i < length
+		memory[_start + i] -> value
+		i -> i + 1
+
 def rgb(red, green, blue)
 	out -> (red * 99 / 255 * 10000) + (green * 99 / 255 * 100) + (blue * 99 / 255)
 
 def keyPressed(key)
 	out -> and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key])
 	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
+
+def assert(condition)
+	if condition = false
+		throwError(ERROR_ASSERT)
 
 def debug(condition)
 	drawPixel(0, 0, cond(condition, GREEN, RED))
@@ -64,4 +75,4 @@ def debug2(condition)
 	drawPixel(SCREEN_WIDTH - 1, 0, cond(condition, GREEN, RED))
 
 def throwError(error)
-	memory[ERROR_ARRAY_INDEX_OUT_OF_BOUNDS] -> 0
+	memory[error] -> 0

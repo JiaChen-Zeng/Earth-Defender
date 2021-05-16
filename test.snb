@@ -1,0 +1,23 @@
+include "lib/core.snb"
+
+#================interpreter bug================
+
+if (0 < 1) = 0
+	memory[100000] -> 0
+
+if (0 <= 1) = 0 # ?
+	# memory[100001] -> 0 
+
+if (1 > 0) = 0
+	memory[100002] -> 0
+
+if (1 >= 0) = 0 # ?
+	# memory[100003] -> 0
+
+#===================random======================
+
+# won't produce negative value
+i -> 0
+while i < 100000
+	assert(random(99999) > 0)
+	i -> i + 1

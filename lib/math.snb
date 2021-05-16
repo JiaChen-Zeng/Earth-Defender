@@ -1,7 +1,7 @@
-const _math_var -> _lib_var + 400  # 200 vars
+const _math_var -> _lib_var + 400 # 200 vars
 
 def mod(a, b)
-	out -> a - ((a / b) * b)
+	out -> a - (a / b * b)
 
 def max(a, b)
 	out -> cond(a < b, b, a)
@@ -13,9 +13,10 @@ def abs(number)
 	out -> cond(number > 0, number, -number)
 
 const _randomSeed -> _math_var
-memory[_randomSeed] -> 987654321
-const RANDOM_MULTIPLIER -> 543
-const RANDOM_OFFSET -> 87654
+# Credit: Stephen J. Chapman. "Example 6.4 – Random Number Generator". "MATLAB Programming for Engineers". 2015. pp. 253–256.
+const RANDOM_MULTIPLIER -> 8121
+const RANDOM_INCREMENT -> 28411
+const RANDOM_MODULUS -> 134456
 def random(number)
-	memory[_randomSeed] -> RANDOM_MULTIPLIER * memory[_randomSeed] + RANDOM_OFFSET
+	memory[_randomSeed] -> mod(RANDOM_MULTIPLIER * memory[_randomSeed] + RANDOM_INCREMENT, RANDOM_MODULUS)
 	out -> mod(memory[_randomSeed], number)
