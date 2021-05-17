@@ -1,7 +1,6 @@
 const LANE_COUNT -> 7
 const LANE_MARGIN -> 1
 const LANE_WIDTH -> 12
-# const LANE_WIDTH -> (SCREEN_WIDTH - (LANE_MARGIN * (LANE_COUNT + 1))) / LANE_COUNT
 def getLaneX(index)
 	out -> LANE_MARGIN + ((LANE_WIDTH + LANE_MARGIN) * index)
 
@@ -13,3 +12,6 @@ const SPOT_SPACE -> 10
 const SPOT_RANGE -> 4
 def getSpot(index)
 	out -> SPOT_TOP + (index * SPOT_SPACE)
+
+def getLength(x, y)
+	out -> sqrt((x * x) + (y * y))

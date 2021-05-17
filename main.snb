@@ -25,8 +25,7 @@ const _selectedTowerIndex -> 2
 
 const _enemyCount -> 3
 
-const _tempArray -> 1000
-const _towers -> _tempArray + 1000
+const _towers -> 1000
 const _enemies -> _towers + 1000
 const _paths -> _enemies + 1000
 
@@ -79,7 +78,10 @@ def update()
 		updateTowers()
 
 def updateEnemies()
-	# TODO
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		Enemy_update(Array_at(_enemies, i))
+		i -> i + 1
 
 def updateTowers()
 	# TODO
@@ -110,8 +112,8 @@ def draw()
 		drawPaths()
 
 	if memory[_state] = STATE_BATTLE
-		drawPaths()
 		drawEnemies()
+		drawPaths()
 
 	drawUI()
 
@@ -180,11 +182,8 @@ def initPaths()
 		newPathSet -> false
 		while newPathSet = false
 			laneIndex -> random(LANE_COUNT)
-			# assert(and(-1 < laneIndex, true))
 			if memory[_tempArray + laneIndex] = false
 				memory[_tempArray + laneIndex] -> true
-				# temp -> random(LANE_COUNT)
-				# assert(and(0 <= temp, temp <= 6))
 				Path(Array_at(_paths, i), laneIndex, random(LANE_COUNT), 0, 2 + random(SPOT_RANGE))
 				newPathSet -> true
 		i -> i + 1

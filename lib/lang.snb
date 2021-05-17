@@ -1,7 +1,5 @@
+include "Float.snb"
 include "Array.snb"
-
-const _lang_var -> _lib_var # 200 vars
-const _keyPressedInternal -> _lang_var # 0 ~ 9
 
 const _key_begin -> 50000
 const MOUSE_X -> 50000
@@ -17,9 +15,14 @@ const KEY_ENTER -> 50009
 
 const SCREEN -> 60000
 
+const INTEGER_MAX -> 200000000
+
 const ERROR_ASSERT -> 100000
 const ERROR_ARRAY_INDEX_OUT_OF_BOUNDS -> 100001
 const ERROR_POINT_OUT_OF_SCREEN -> 100002
+const ERROR_INTEGER_OVERFLOW -> 100003
+const ERROR_ILLEGAL_ARGUMENT -> 100004
+const ERROR_NOT_IMPLEMENTED -> 100005
 
 const SCREEN_WIDTH -> 100
 const SCREEN_HEIGHT -> 100

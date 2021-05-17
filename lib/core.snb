@@ -1,5 +1,14 @@
-const _lib_var -> 19000
+const _lib_var -> 18000
 
+const _lang_var -> _lib_var # reserve for 1200 vars
+const _tempFloat -> _lang_var # 2 vars
+const _tempArray -> _tempFloat + 2 # 1000 vars
+const _keyPressedInternal -> _tempArray + 1000 # 10 vars
 include "lang.snb"
+
+const _graphics_var -> _lang_var + 1200 # reserve for 200 vars
 include "graphics.snb"
+
+const _math_var -> _graphics_var + 200 # reserve for 200 vars
+const _randomSeed -> _math_var # 1 var
 include "math.snb"

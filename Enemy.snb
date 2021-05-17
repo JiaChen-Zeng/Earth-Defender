@@ -1,20 +1,50 @@
-const Enemy_size -> 4
+const Enemy_size -> 8
 const Enemy_life -> 0
 const Enemy__path -> 1
-const Enemy_x -> 2
-const Enemy_y -> 3
+const Enemy_x -> 2 # float
+const Enemy_y -> 4 # float
+const Enemy_speed -> 6
+const Enemy_time -> 7
 
 const ENEMY_RADIUS -> LANE_WIDTH / 2 - 1
+const ENEMY_SPEED_BASE -> 6 # frames per movement of 1 pixel
+const ENEMY_SPEED_MIN -> 60
 
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> life
 	memory[this + Enemy__path] -> _path
 	# memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
-	memory[this + Enemy_x] -> memory[_path + Path_fromX]
-	memory[this + Enemy_y] -> memory[_path + Path_fromY]
+	Float_fromInt(this + Enemy_x, memory[_path + Path_fromX], POINT_PRECISION)
+	Float_fromInt(this + Enemy_y, memory[_path + Path_fromY], POINT_PRECISION)
+	memory[this + Enemy_speed] -> ENEMY_SPEED_BASE
+	memory[this + Enemy_time] -> 0
+
+def Enemy_update(this)
+	# TODO: set proper time when changing speed
+	memory[this + Enemy_time] -> mod(memory[this + Enemy_time] + 1, memory[this + Enemy_speed])
+	if memory[this + Enemy_time] = 0
+		_path -> memory[this + Enemy__path]
+		InPath -> Path_InPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y))
+		if InPath
+			distanceX -> memory[_path + Path_toX] - memory[_path + Path_fromX]
+			distanceY -> memory[_path + Path_toY] - memory[_path + Path_fromY]
+			distance -> getLength(distanceX, distanceY)
+
+			Float_fromInt(_tempFloat, distanceX, POINT_PRECISION)
+			Float_divInt(_tempFloat, distance)
+			Float_add(this + Enemy_x, _tempFloat)
+
+			Float_fromInt(_tempFloat, distanceY, POINT_PRECISION)
+			Float_divInt(_tempFloat, distance)
+			Float_add(this + Enemy_y, _tempFloat)
+			if Path_InPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y)) = false
+				Float_fromInt(this + Enemy_x, memory[_path + Path_toX], POINT_PRECISION)
+				Float_fromInt(this + Enemy_y, memory[_path + Path_toY] + 1, POINT_PRECISION)
+		if InPath = false
+			Float_addInt(this + Enemy_y, 1)
 
 def Enemy_draw(this)
-	drawCircle(memory[this + Enemy_x], memory[this + Enemy_y], ENEMY_RADIUS, 440000)
+	drawCircle(Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y), ENEMY_RADIUS, 440000)
 
 def Enemy_getToLane(this)
 	out -> memory[memory[this + Enemy__path] + Path_toLane]

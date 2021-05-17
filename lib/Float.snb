@@ -1,0 +1,57 @@
+const Float_size -> 2
+const Float_number -> 0
+const Float_pointIndex -> 1
+
+const POINT_PRECISION -> 2 # precision for points in screen, not floating points
+
+def Float(this, number, pointIndex)
+	memory[this + Float_number] -> number
+	memory[this + Float_pointIndex] -> pointIndex
+
+def Float_fromInt(this, int, pointIndex)
+	memory[this + Float_number] -> int * pow(10, pointIndex)
+	memory[this + Float_pointIndex] -> pointIndex
+
+def Float_add(this, _float)
+	# PROBLEM: Wrong to bring side effect to argument float 
+	# pointIndexDifference -> memory[this + Float_pointIndex] - memory[_float + Float_pointIndex]
+	# if pointIndexDifference < 0
+	# 	_bigger -> _float
+	# 	_smaller -> this
+	# if pointIndexDifference > 0
+	# 	_bigger -> this
+	# 	_smaller -> _float
+	# if pointIndexDifference != 0
+	# 	memory[_smaller + Float_number] -> memory[_smaller + Float_number] * pow(10, abs(pointIndexDifference))
+	# 	assertEx(memory[_smaller + Float_number] < INTEGER_MAX, ERROR_INTEGER_OVERFLOW)
+	# 	memory[_smaller + Float_pointIndex] -> memory[_bigger + Float_pointIndex]
+
+	assertEx(memory[this + Float_pointIndex] = memory[_float + Float_pointIndex], ERROR_NOT_IMPLEMENTED)
+	
+	memory[this + Float_number] -> memory[this + Float_number] + memory[_float + Float_number]
+	# TODO: Eliminate extra ending zeros
+
+def Float_divInt(this, int)
+	memory[this + Float_number] -> memory[this + Float_number] / int
+
+def Float_addInt(this, int)
+	memory[this + Float_number] -> memory[this + Float_number] + (int * pow(10, memory[this + Float_pointIndex]))
+
+def Float_toInt(this)
+	int -> memory[this + Float_number]
+	i -> 0
+	while i < memory[this + Float_pointIndex]
+		int -> int / 10
+		i -> i + 1
+	out -> int
+
+def Float_roundToInt(this)
+	int -> memory[this + Float_number]
+	pointIndex -> memory[this + Float_pointIndex]
+	if 0 < pointIndex
+		int -> int + (5 * pow(10, pointIndex - 1))
+	i -> 0
+	while i < pointIndex
+		int -> int / 10
+		i -> i + 1
+	out -> int

@@ -3,21 +3,32 @@ include "lib/core.snb"
 #================interpreter bug================
 
 if (0 < 1) = 0
-	memory[100000] -> 0
+	memory[200000] -> 0
 
 if (0 <= 1) = 0 # ?
-	# memory[100001] -> 0 
+	# memory[200001] -> 0 
 
 if (1 > 0) = 0
-	memory[100002] -> 0
+	memory[200002] -> 0
 
 if (1 >= 0) = 0 # ?
-	# memory[100003] -> 0
+	# memory[200003] -> 0
 
 #===================random======================
 
 # won't produce negative value
 i -> 0
 while i < 100000
-	assert(random(99999) > 0)
+	assertEx(random(99999) > 0, 200004)
 	i -> i + 1
+
+#===================pow======================
+
+assertEx(pow(10, 3) = 1000, 200005)
+assertEx(pow(0, 0) = 1, 200006)
+
+#===================sqrt======================
+
+assertEx(sqrt(1) = 1, 200007)
+assertEx(sqrt(2) = 1, 200008)
+assertEx(sqrt(4) = 2, 200009)
