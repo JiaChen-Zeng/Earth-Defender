@@ -1,0 +1,9 @@
+const _state -> 0
+const _gold -> 1
+const _selectedTowerIndex -> 2
+const _enemyCount -> 3
+
+const _colors -> 1000
+const _towers -> _colors + 1000
+const _enemies -> _towers + 1000
+const _paths -> _enemies + 1000
