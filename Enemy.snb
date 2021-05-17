@@ -24,7 +24,7 @@ def Enemy_update(this)
 	memory[this + Enemy_time] -> mod(memory[this + Enemy_time] + 1, memory[this + Enemy_speed])
 	if memory[this + Enemy_time] = 0
 		_path -> memory[this + Enemy__path]
-		InPath -> Path_InPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y))
+		InPath -> Path_inPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y))
 		if InPath
 			distanceX -> memory[_path + Path_toX] - memory[_path + Path_fromX]
 			distanceY -> memory[_path + Path_toY] - memory[_path + Path_fromY]
@@ -37,7 +37,7 @@ def Enemy_update(this)
 			Float_fromInt(_tempFloat, distanceY, POINT_PRECISION)
 			Float_divInt(_tempFloat, distance)
 			Float_add(this + Enemy_y, _tempFloat)
-			if Path_InPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y)) = false
+			if Path_inPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y)) = false
 				Float_fromInt(this + Enemy_x, memory[_path + Path_toX], POINT_PRECISION)
 				Float_fromInt(this + Enemy_y, memory[_path + Path_toY] + 1, POINT_PRECISION)
 		if InPath = false
