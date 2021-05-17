@@ -4,10 +4,22 @@ const Tower_level -> 1
 
 const TOWER_WIDTH -> LANE_WIDTH
 const TOWER_HEIGHT -> 10
+const TOWER_Y -> SCREEN_HEIGHT - TOWER_HEIGHT
+const TOWER_LEVEL_MAX -> 10 # level 0 for empty tower
+const TOWER_COLOR_EMPTY -> 777777
 
 def Tower(this, index, level)
 	memory[this + Tower_index] -> index
 	memory[this + Tower_level] -> level
 
 def Tower_draw(this)
-	drawRect(getLaneX(memory[this + Tower_index]), SCREEN_HEIGHT - TOWER_HEIGHT, TOWER_WIDTH, TOWER_HEIGHT, memory[_colors + memory[this + Tower_level]])
+	color -> memory[_colors + memory[this + Tower_level] - 1]
+	if memory[this + Tower_level] = 0
+		color -> TOWER_COLOR_EMPTY
+	
+	drawRect(getLaneX(memory[this + Tower_index]), TOWER_Y, TOWER_WIDTH, TOWER_HEIGHT, color)
+
+def Tower_hit(this)
+	memory[this + Tower_level] -> max(memory[this + Tower_level] - 1, 0)
+	if memory[this + Tower_level] = 0
+		onTowerDestroyed(memory[this + Tower_index])

@@ -1,3 +1,5 @@
+const ERROR_ENEMY_COUNT_EXCEEDED -> 200000
+
 const LANE_COUNT -> 7
 const LANE_MARGIN -> 1
 const LANE_WIDTH -> 12

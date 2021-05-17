@@ -20,7 +20,6 @@ const STATE_GAMEOVER -> 3
 const GOLD_INITIAL -> 10
 const GOLD_MAX -> 50
 
-const LEVEL_MAX -> 9 # level from 0
 # light -> dark
 # blue -> green -> orange -> red -> purple
 memory[_colors] -> rgb(100, 145, 217)
@@ -56,7 +55,7 @@ def update()
 			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT - 1)
 		if and(keyPressed(KEY_SPACE), 0 < memory[_gold])
 			_towerLevel -> Array_at(_towers, memory[_selectedTowerIndex]) + Tower_level
-			if (memory[_towerLevel] + 1) <= LEVEL_MAX
+			if (memory[_towerLevel] + 1) <= TOWER_LEVEL_MAX
 				memory[_gold] -> memory[_gold] - 1
 				memory[_towerLevel] -> memory[_towerLevel] + 1
 
@@ -65,16 +64,33 @@ def update()
 
 	if memory[_state] = STATE_BATTLE
 		updateEnemies()
+		detectEnemyTowerCollision()
 		updateTowers()
+		if anyEnemyExists() = false
+			enterReady()
 
 def updateEnemies()
 	i -> 0
 	while i < memory[_enemies + Array_length]
-		Enemy_update(Array_at(_enemies, i))
+		_enemy -> Array_at(_enemies, i)
+		if 0 < memory[_enemy + Enemy_life]
+			Enemy_update(_enemy)
 		i -> i + 1
 
 def updateTowers()
 	# TODO
+
+def detectEnemyTowerCollision()
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		_enemy -> Array_at(_enemies, i)
+		if 0 < memory[_enemy + Enemy_life]
+			if Enemy_collidedWithTower(_enemy)
+				onEnemyCollidedWithTower(_enemy)
+
+		if Enemy_arrived(_enemy)
+			enemyExplode(_enemy)
+		i -> i + 1
 
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
@@ -85,7 +101,7 @@ def enterInitial()
 def enterReady()
 	memory[_state] -> STATE_READY
 	memory[_selectedTowerIndex] -> 0
-	memory[_enemyCount] -> memory[_enemyCount] + 1
+	memory[_enemyCount] -> min(memory[_enemyCount] + 1, LANE_COUNT)
 	initPaths()
 
 def enterBattle()
@@ -102,8 +118,8 @@ def draw()
 		drawPaths()
 
 	if memory[_state] = STATE_BATTLE
-		drawEnemies()
 		drawPaths()
+		drawEnemies()
 
 	drawUI()
 
@@ -153,17 +169,20 @@ def drawPaths()
 def drawEnemies()
 	i -> 0
 	while i < memory[_enemies + Array_length]
-		Enemy_draw(Array_at(_enemies, i))
+		_enemy -> Array_at(_enemies, i)
+		if 0 < memory[_enemy + Enemy_life]
+			Enemy_draw(_enemy)
 		i -> i + 1
 
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
 	i -> 0
 	while i < LANE_COUNT
-		Tower(Array_at(_towers, i), i, 0)
+		Tower(Array_at(_towers, i), i, 1)
 		i -> i + 1
 
 def initPaths()
+	assertEx(memory[_enemyCount] <= LANE_COUNT, ERROR_ENEMY_COUNT_EXCEEDED)
 	Array(_paths, memory[_enemyCount], Path_size)
 
 	setMemory(_tempArray, memory[_paths + Array_length], false) # true for existence of path in <index>-nd lane
@@ -184,3 +203,38 @@ def initEnemies()
 	while i < memory[_enemies + Array_length]
 		Enemy(Array_at(_enemies, i), 1, Array_at(_paths, i))
 		i -> i + 1
+
+def enemyExplode(_enemy)
+	memory[_enemy + Enemy_life] -> 0
+	lane -> Enemy_getToLane(_enemy) - 1
+	i -> 0
+	while i < 3
+		if and(0 <= lane, lane < LANE_COUNT)
+			Tower_hit(Array_at(_towers, lane))
+		lane -> lane + 1
+		i -> i + 1
+
+def anyTowerExists()
+	towerExists -> false
+	i -> 0
+	while i < memory[_towers + Array_length]
+		towerExists -> or(towerExists, 0 < memory[Array_at(_towers, i) + Tower_level])
+		i -> i + 1
+	out -> towerExists
+
+def anyEnemyExists()
+	enemyExists -> false
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		enemyExists -> or(enemyExists, 0 < memory[Array_at(_enemies, i) + Enemy_life])
+		i -> i + 1
+	out -> enemyExists
+
+def onTowerDestroyed(index)
+
+def onEnemyCollidedWithTower(_enemy)
+	_tower -> Array_at(_towers, Enemy_getToLane(_enemy))
+	towerExists -> 0 < memory[_tower + Tower_level]
+	if towerExists
+		memory[_enemy + Enemy_life] -> 0
+		Tower_hit(_tower)
