@@ -1,0 +1,24 @@
+const Bullet_size -> 2
+const Bullet_x -> 0
+const Bullet_y -> 1
+
+const BULLET_WIDTH -> 1
+const BULLET_HEIGHT -> 2
+const BULLET_Y -> TOWER_Y - BULLET_HEIGHT
+const BULLET_COLOR -> 111111
+
+def Bullet(this, lane)
+	memory[this + Bullet_x] -> getLaneMiddleX(lane)
+	memory[this + Bullet_y] -> BULLET_Y
+
+def Bullet_update(this)
+	memory[this + Bullet_y] -> memory[this + Bullet_y] - 1
+
+def Bullet_draw(this)
+	drawRect(memory[this + Bullet_x], memory[this + Bullet_y], BULLET_WIDTH, BULLET_HEIGHT, BULLET_COLOR)
+
+def Bullet_remove(this)
+	memory[this + Bullet_y] -> -1
+
+def Bullet_isLive(this)
+	out -> 0 < memory[this + Bullet_y]

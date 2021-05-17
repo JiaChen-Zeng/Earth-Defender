@@ -49,11 +49,21 @@ def Enemy_move(this)
 	if InPath = false
 		Float_addInt(this + Enemy_y, 1)
 
+def Enemy_hit(this)
+	memory[this + Enemy_life] -> memory[this + Enemy_life] - 1
+	if memory[this + Enemy_life] = 0
+		onEnemyKilled(this)
+
 def Enemy_getToLane(this)
 	out -> memory[memory[this + Enemy__path] + Path_toLane]
 
 def Enemy_collidedWithTower(this)
 	out -> TOWER_Y <= (Float_toInt(this + Enemy_y) + ENEMY_RADIUS)
+
+def Enemy_collidedWithBullet(this, _bullet)
+	circleX -> Float_roundToInt(this + Enemy_x)
+	circleY -> Float_roundToInt(this + Enemy_y)
+	out -> or(isPointInCircle(memory[_bullet + Bullet_x], memory[_bullet + Bullet_y], circleX, circleY, ENEMY_RADIUS), isPointInCircle(memory[_bullet + Bullet_x], memory[_bullet + Bullet_y] - 1, circleX, circleY, ENEMY_RADIUS))
 
 def Enemy_arrived(this)
 	out -> (Float_toInt(this + Enemy_y) + ENEMY_RADIUS) = (SCREEN_HEIGHT - 1)

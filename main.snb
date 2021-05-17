@@ -6,6 +6,7 @@
 include "lib/core.snb"
 include "utils.snb"
 include "Tower.snb"
+include "Bullet.snb"
 include "Enemy.snb"
 include "Path.snb"
 include "memory.snb"
@@ -63,9 +64,11 @@ def update()
 			enterBattle()
 
 	if memory[_state] = STATE_BATTLE
-		updateEnemies()
-		detectEnemyTowerCollision()
 		updateTowers()
+		updateBullets()
+		updateEnemies()
+		handleEnemiesTowersCollision()
+		handleEnemiesBulletsCollision()
 		if anyEnemyExists() = false
 			enterReady()
 
@@ -78,9 +81,22 @@ def updateEnemies()
 		i -> i + 1
 
 def updateTowers()
-	# TODO
+	i -> 0
+	while i < memory[_towers + Array_length]
+		_tower -> Array_at(_towers, i)
+		if 0 < memory[_tower + Tower_level]
+			Tower_update(_tower)
+		i -> i + 1
 
-def detectEnemyTowerCollision()
+def updateBullets()
+	i -> 0
+	while i < memory[_bulletNextIndex]
+		_bullet -> Array_at(_bullets, i)
+		if Bullet_isLive(_bullet)
+			Bullet_update(_bullet)
+		i -> i + 1
+
+def handleEnemiesTowersCollision()
 	i -> 0
 	while i < memory[_enemies + Array_length]
 		_enemy -> Array_at(_enemies, i)
@@ -90,6 +106,23 @@ def detectEnemyTowerCollision()
 
 		if Enemy_arrived(_enemy)
 			enemyExplode(_enemy)
+		i -> i + 1
+
+def handleEnemiesBulletsCollision()
+	i -> 0
+	while i < memory[_bulletNextIndex]
+		_bullet -> Array_at(_bullets, i)
+		if Bullet_isLive(_bullet)
+			handleEnemiesBulletCollision(_bullet)
+		i -> i + 1
+
+def handleEnemiesBulletCollision(_bullet)
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		_enemy -> Array_at(_enemies, i)
+		if and(0 < memory[_enemy + Enemy_life], Enemy_collidedWithBullet(_enemy, _bullet))
+			Enemy_hit(_enemy)
+			Bullet_remove(_bullet)
 		i -> i + 1
 
 def enterInitial()
@@ -106,6 +139,7 @@ def enterReady()
 
 def enterBattle()
 	memory[_state] -> STATE_BATTLE
+	initBullets()
 	initEnemies()
 
 def draw()
@@ -120,6 +154,7 @@ def draw()
 	if memory[_state] = STATE_BATTLE
 		drawPaths()
 		drawEnemies()
+		drawBullets()
 
 	drawUI()
 
@@ -174,12 +209,25 @@ def drawEnemies()
 			Enemy_draw(_enemy)
 		i -> i + 1
 
+def drawBullets()
+	i -> 0
+	while i < memory[_bulletNextIndex]
+		_bullet -> Array_at(_bullets, i)
+		if Bullet_isLive(_bullet)
+			Bullet_draw(_bullet)
+		i -> i + 1
+
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
 	i -> 0
 	while i < LANE_COUNT
 		Tower(Array_at(_towers, i), i, 1)
 		i -> i + 1
+
+const BULLET_MAX_COUNT -> 2000
+def initBullets()
+	Array(_bullets, BULLET_MAX_COUNT, Bullet_size)
+	memory[_bulletNextIndex] -> 0
 
 def initPaths()
 	assertEx(memory[_enemyCount] <= LANE_COUNT, ERROR_ENEMY_COUNT_EXCEEDED)
@@ -230,7 +278,14 @@ def anyEnemyExists()
 		i -> i + 1
 	out -> enemyExists
 
+def onTowerShoot(index)
+	Bullet(Array_at(_bullets, memory[_bulletNextIndex]), index)
+	memory[_bulletNextIndex] -> memory[_bulletNextIndex] + 1
+
 def onTowerDestroyed(index)
+
+def onEnemyKilled(_enemy)
+	memory[_gold] -> min(memory[_gold] + 1, GOLD_MAX)
 
 def onEnemyCollidedWithTower(_enemy)
 	_tower -> Array_at(_towers, Enemy_getToLane(_enemy))

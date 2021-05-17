@@ -17,3 +17,8 @@ def getSpot(index)
 
 def getLength(x, y)
 	out -> sqrt((x * x) + (y * y))
+
+def isPointInCircle(x, y, circleX, circleY, radius)
+	offsetX -> circleX - x
+	offsetY -> circleY - y
+	out -> ((offsetX * offsetX) + (offsetY * offsetY)) <= (radius * radius)
