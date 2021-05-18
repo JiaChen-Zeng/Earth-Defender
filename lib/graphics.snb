@@ -14,13 +14,7 @@ def sleep(time)
 		time -> time - 1
 
 def fill(color)
-	y -> 0
-	while y < SCREEN_HEIGHT
-		x -> 0
-		while x < SCREEN_WIDTH
-			drawPixel(x, y, color)
-			x -> x + 1
-		y -> y + 1
+	setMemory(SCREEN, 10000, color) # optimized for performance
 
 def clear()
 	fill(999999)
