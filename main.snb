@@ -41,7 +41,6 @@ def main()
 	while true
 		update()
 		draw()
-		debug(0 < memory[_gold])
 		flush()
 
 def update()
@@ -141,8 +140,7 @@ def handleEnemiesBulletCollision(_bullet)
 	while i < memory[_enemies + Array_length]
 		_enemy -> Array_at(_enemies, i)
 		if and(0 < memory[_enemy + Enemy_life], Enemy_collidedWithBullet(_enemy, _bullet))
-			Enemy_hit(_enemy)
-			Bullet_remove(_bullet)
+			bulletExplode(_bullet)
 		i -> i + 1
 
 def enterInitial()
@@ -271,6 +269,15 @@ def initEnemies()
 	while i < memory[_enemies + Array_length]
 		Enemy(Array_at(_enemies, i), 1, Array_at(_paths, i))
 		i -> i + 1
+
+def bulletExplode(_bullet)
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		_enemy -> Array_at(_enemies, i)
+		if and(0 < memory[_enemy + Enemy_life], Bullet_isEnemyInExplosion(_bullet, _enemy))
+			Enemy_hit(_enemy)
+		i -> i + 1
+	Bullet_remove(_bullet)
 
 def enemyExplode(_enemy)
 	memory[_enemy + Enemy_life] -> 0

@@ -11,6 +11,8 @@ const ENEMY_RADIUS -> LANE_WIDTH / 2 - 1
 const ENEMY_SPEED_BASE -> 2 # frames per movement of 1 pixel
 const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
+const ENEMY_COLOR -> 440000
+const ENEMY_COLOR_HIT -> 444444
 
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> 6
@@ -28,7 +30,10 @@ def Enemy_update(this)
 		Enemy_move(this)
 
 def Enemy_draw(this)
-	drawCircle(Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y), ENEMY_RADIUS, 440000)
+	Enemy_drawInternal(this, ENEMY_COLOR)
+
+def Enemy_drawInternal(this, color)
+	drawCircle(Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y), ENEMY_RADIUS, color)
 
 def Enemy_move(this)
 	_path -> memory[this + Enemy__path]
@@ -53,6 +58,8 @@ def Enemy_move(this)
 
 def Enemy_hit(this)
 	memory[this + Enemy_life] -> memory[this + Enemy_life] - 1
+	Enemy_drawInternal(this, ENEMY_COLOR_HIT)
+	flush()
 	if memory[this + Enemy_life] = 0
 		onEnemyKilled(this)
 
@@ -85,4 +92,4 @@ def Enemy_collidedWithEnemy(this, _enemy)
 	out -> ((offsetX * offsetX) + (offsetY * offsetY)) <= (4 * ENEMY_RADIUS * ENEMY_RADIUS)
 
 def Enemy_arrived(this)
-	out -> (Float_toInt(this + Enemy_y) + ENEMY_RADIUS) = (SCREEN_HEIGHT - 1)
+	out -> (Float_roundToInt(this + Enemy_y) + ENEMY_RADIUS) = (SCREEN_HEIGHT - 1)

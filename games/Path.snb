@@ -8,6 +8,8 @@ const Path_toLane -> 5
 const Path_fromSpot -> 6
 const Path_toSpot -> 7
 
+const PATH_COLOR -> 896464
+
 def Path(this, fromLane, toLane, fromSpot, toSpot)
 	memory[this + Path_fromX] -> getLaneMiddleX(fromLane)
 	memory[this + Path_toX] -> getLaneMiddleX(toLane)
@@ -20,7 +22,7 @@ def Path(this, fromLane, toLane, fromSpot, toSpot)
 	memory[this + Path_toSpot] -> toSpot
 
 def Path_draw(this)
-	drawLine(memory[this + Path_fromX], memory[this + Path_fromY], memory[this + Path_toX], memory[this + Path_toY], 008877)
+	drawLine(memory[this + Path_fromX], memory[this + Path_fromY], memory[this + Path_toX], memory[this + Path_toY], PATH_COLOR)
 
 def Path_inPath(this, x, y)
 	out -> and(or(and(memory[this + Path_fromX] <= x, x <= memory[this + Path_toX]), and(memory[this + Path_toX] <= x, x <= memory[this + Path_fromX])), and(memory[this + Path_fromY] <= y, y <= memory[this + Path_toY]))

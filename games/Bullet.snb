@@ -6,6 +6,7 @@ const BULLET_WIDTH -> 1
 const BULLET_HEIGHT -> 2
 const BULLET_Y -> TOWER_Y - BULLET_HEIGHT
 const BULLET_COLOR -> 111111
+const BULLET_EXPLOSION_RADIUS -> 5
 
 def Bullet(this, lane)
 	memory[this + Bullet_x] -> getLaneMiddleX(lane)
@@ -22,3 +23,8 @@ def Bullet_remove(this)
 
 def Bullet_isLive(this)
 	out -> 0 < memory[this + Bullet_y]
+
+def Bullet_isEnemyInExplosion(this, _enemy)
+	offsetX -> memory[this + Bullet_x] - Float_roundToInt(_enemy + Enemy_x)
+	offsetY -> memory[this + Bullet_y] - Float_roundToInt(_enemy + Enemy_y)
+	out -> ((offsetX * offsetX) + (offsetY * offsetY)) <= ((BULLET_EXPLOSION_RADIUS * BULLET_EXPLOSION_RADIUS) + (2 * BULLET_EXPLOSION_RADIUS * ENEMY_RADIUS) + (ENEMY_RADIUS * ENEMY_RADIUS))

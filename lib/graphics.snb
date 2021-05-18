@@ -8,6 +8,11 @@ def setManualFlush(manualFlush)
 def flush()
 	memory[55000] -> 1
 
+def sleep(time)
+	while time < 0
+		flush()
+		time -> time - 1
+
 def fill(color)
 	y -> 0
 	while y < SCREEN_HEIGHT
