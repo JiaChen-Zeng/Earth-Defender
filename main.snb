@@ -122,9 +122,8 @@ def handleEnemiesTowersCollision()
 		if 0 < memory[_enemy + Enemy_life]
 			if Enemy_collidedWithTower(_enemy)
 				onEnemyCollidedWithTower(_enemy)
-
-		if Enemy_arrived(_enemy)
-			enemyExplode(_enemy)
+			if Enemy_arrived(_enemy)
+				enemyExplode(_enemy)
 		i -> i + 1
 
 def handleEnemiesBulletsCollision()
