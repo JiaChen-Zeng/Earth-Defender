@@ -13,6 +13,7 @@ const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
 const ENEMY_COLOR -> 440000
 const ENEMY_COLOR_HIT -> 444444
+const ENEMY_COLOR_EYE -> 000000
 
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> life
@@ -33,7 +34,17 @@ def Enemy_draw(this)
 	Enemy_drawInternal(this, memory[_colors + ((memory[this + Enemy_life] + 4) / 5 - 1)])
 
 def Enemy_drawInternal(this, color)
-	drawCircle(Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y), ENEMY_RADIUS, color)
+	x -> Float_roundToInt(this + Enemy_x)
+	y -> Float_roundToInt(this + Enemy_y)
+	drawPixel(x, y - ENEMY_RADIUS - 2, color)
+	drawPixel(x, y - ENEMY_RADIUS - 1, color)
+	drawCircle(x, y, ENEMY_RADIUS, color)
+	drawPixel(x - 1, y + 2, ENEMY_COLOR_EYE)
+	drawPixel(x + 1, y + 2, ENEMY_COLOR_EYE)
+
+def Enemy_animateHit(this)
+	Enemy_drawInternal(this, ENEMY_COLOR_HIT)
+	flush()
 
 def Enemy_move(this)
 	_path -> memory[this + Enemy__path]
@@ -58,8 +69,7 @@ def Enemy_move(this)
 
 def Enemy_hit(this)
 	memory[this + Enemy_life] -> memory[this + Enemy_life] - 1
-	Enemy_drawInternal(this, ENEMY_COLOR_HIT)
-	flush()
+	Enemy_animateHit(this)
 	if memory[this + Enemy_life] = 0
 		onEnemyKilled(this)
 

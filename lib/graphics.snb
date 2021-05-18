@@ -1,6 +1,7 @@
 const RED -> 990000
 const GREEN -> 009900
 const BLUE -> 000099
+const BACKGROUND_COLOR -> 999999
 
 def setManualFlush(manualFlush)
 	memory[55001] -> manualFlush
@@ -9,7 +10,7 @@ def flush()
 	memory[55000] -> 1
 
 def sleep(time)
-	while time < 0
+	while 0 < time
 		flush()
 		time -> time - 1
 
@@ -17,7 +18,7 @@ def fill(color)
 	setMemory(SCREEN, 10000, color) # optimized for performance
 
 def clear()
-	fill(999999)
+	fill(BACKGROUND_COLOR)
 
 def offset(x, y)
 	out -> (y * SCREEN_WIDTH) + x

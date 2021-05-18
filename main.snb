@@ -310,7 +310,9 @@ def enemyExplode(_enemy)
 	i -> 0
 	while i < 3
 		if and(0 <= lane, lane < LANE_COUNT)
-			Tower_hit(Array_at(_towers, lane))
+			_tower -> Array_at(_towers, lane)
+			if 0 < memory[_tower + Tower_level]
+				Tower_hit(_tower)
 		lane -> lane + 1
 		i -> i + 1
 

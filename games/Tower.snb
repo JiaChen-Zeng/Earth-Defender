@@ -35,10 +35,24 @@ def Tower_draw(this)
 	if memory[this + Tower_level] = 0
 		color -> TOWER_COLOR_EMPTY
 
-	Tower_drawInternal(this, color)
+	Tower_drawInternal(this, color, 0)
 
-def Tower_drawInternal(this, color)
-	drawRect(getLaneX(memory[this + Tower_index]), TOWER_Y, TOWER_WIDTH, TOWER_HEIGHT, color)
+def Tower_drawInternal(this, color, offsetX)
+	x -> getLaneX(memory[this + Tower_index]) + offsetX
+	if memory[this + Tower_level] != 0
+		drawRect(x + (TOWER_WIDTH / 2) - 1, TOWER_Y - 3, 2, 3, color)
+	drawRect(x, TOWER_Y, TOWER_WIDTH, TOWER_HEIGHT, color)
+
+def Tower_animateHit(this)
+	draw()
+	Tower_drawInternal(this, TOWER_COLOR_HIT, 0)
+	sleep(5)
+	Tower_drawInternal(this, BACKGROUND_COLOR, 0)
+	Tower_drawInternal(this, TOWER_COLOR_HIT, -1)
+	sleep(5)
+	Tower_drawInternal(this, BACKGROUND_COLOR, -1)
+	Tower_drawInternal(this, TOWER_COLOR_HIT, 1)
+	sleep(5)
 
 def Tower_addLevel(this, difference)
 	out -> false
@@ -48,9 +62,9 @@ def Tower_addLevel(this, difference)
 		out -> true
 
 def Tower_hit(this)
+	# shooting speed decreased but no need to adjust time
 	memory[this + Tower_level] -> max(memory[this + Tower_level] - 1, 0)
-	Tower_drawInternal(this, TOWER_COLOR_HIT)
-	flush()
+	Tower_animateHit(this) # TODO: move to main and animate all hit tower at once
 	if memory[this + Tower_level] = 0
 		onTowerDestroyed(memory[this + Tower_index])
 
