@@ -4,11 +4,11 @@
 # - <Class_property>: property offset for Class
 
 include "lib/core.snb"
-include "utils.snb"
-include "Tower.snb"
-include "Bullet.snb"
-include "Enemy.snb"
-include "Path.snb"
+include "games/utils.snb"
+include "games/Tower.snb"
+include "games/Bullet.snb"
+include "games/Enemy.snb"
+include "games/Path.snb"
 include "memory.snb"
 
 setManualFlush(true)
