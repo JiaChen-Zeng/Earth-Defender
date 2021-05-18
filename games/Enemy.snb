@@ -7,15 +7,15 @@ const Enemy_speedBase -> 6
 const Enemy_speedBuff -> 7
 const Enemy_time -> 8
 
-const ENEMY_RADIUS -> LANE_WIDTH / 2 - 1
-const ENEMY_SPEED_BASE -> 2 # frames per movement of 1 pixel
+const ENEMY_RADIUS -> 5
+const ENEMY_SPEED_BASE -> 4 # frames per movement of 1 pixel
 const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
 const ENEMY_COLOR -> 440000
 const ENEMY_COLOR_HIT -> 444444
 
 def Enemy(this, life, _path)
-	memory[this + Enemy_life] -> 6
+	memory[this + Enemy_life] -> life
 	memory[this + Enemy__path] -> _path
 	# memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
 	Float_fromInt(this + Enemy_x, memory[_path + Path_fromX], POINT_PRECISION)
@@ -30,7 +30,7 @@ def Enemy_update(this)
 		Enemy_move(this)
 
 def Enemy_draw(this)
-	Enemy_drawInternal(this, ENEMY_COLOR)
+	Enemy_drawInternal(this, memory[_colors + ((memory[this + Enemy_life] + 4) / 5 - 1)])
 
 def Enemy_drawInternal(this, color)
 	drawCircle(Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y), ENEMY_RADIUS, color)

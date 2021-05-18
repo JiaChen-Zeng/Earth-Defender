@@ -18,8 +18,12 @@ const STATE_READY -> 1
 const STATE_BATTLE -> 2
 const STATE_GAMEOVER -> 3
 
-const GOLD_INITIAL -> 10
+const GOLD_INITIAL -> 5
 const GOLD_MAX -> 50
+
+const ENEMY_LIFE_TOTAL_INITIAL -> -10
+const ENEMY_LIFE_TOTAL_INCREMENT -> 25
+const ENEMY_LIFE_TOTAL_MAX -> 50 * 7
 
 # light -> dark
 # blue -> green -> orange -> red -> purple
@@ -70,7 +74,10 @@ def update()
 		handleEnemiesTowersCollision()
 		handleEnemiesBulletsCollision()
 		if anyEnemyExists() = false
-			enterReady()
+			if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
+				throwError(ERROR_NOT_IMPLEMENTED)
+			if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
+				enterReady()
 
 def updateEnemies()
 	i -> 0
@@ -145,19 +152,18 @@ def handleEnemiesBulletCollision(_bullet)
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
 	memory[_gold] -> GOLD_INITIAL
-	memory[_enemyCount] -> 3
+	memory[_enemyLifeTotal] -> ENEMY_LIFE_TOTAL_INITIAL
 	initTowers()
 
 def enterReady()
 	memory[_state] -> STATE_READY
 	memory[_selectedTowerIndex] -> 0
-	memory[_enemyCount] -> min(memory[_enemyCount] + 1, LANE_COUNT)
-	initPaths()
+	memory[_enemyLifeTotal] -> min(memory[_enemyLifeTotal] + ENEMY_LIFE_TOTAL_INCREMENT, ENEMY_LIFE_TOTAL_MAX)
+	initPathsAndEnemies()
 
 def enterBattle()
 	memory[_state] -> STATE_BATTLE
 	initBullets()
-	initEnemies()
 
 def draw()
 	clear()
@@ -248,7 +254,7 @@ def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
 	i -> 0
 	while i < LANE_COUNT
-		Tower(Array_at(_towers, i), i, 1)
+		Tower(Array_at(_towers, i), i, 0)
 		i -> i + 1
 
 const BULLET_MAX_COUNT -> 2000
@@ -256,9 +262,16 @@ def initBullets()
 	Array(_bullets, BULLET_MAX_COUNT, Bullet_size)
 	memory[_bulletNextIndex] -> 0
 
-def initPaths()
-	assertEx(memory[_enemyCount] <= LANE_COUNT, ERROR_ENEMY_COUNT_EXCEEDED)
-	Array(_paths, memory[_enemyCount], Path_size)
+def initPathsAndEnemies()
+	life -> 5
+	enemyCount -> memory[_enemyLifeTotal] / life
+	smallEnemyLife -> remainder(memory[_enemyLifeTotal], life)
+	while LANE_COUNT <= (enemyCount + (smallEnemyLife != 0))
+		life -> life + 5
+		enemyCount -> memory[_enemyLifeTotal] / life
+		smallEnemyLife -> remainder(memory[_enemyLifeTotal], life)
+
+	Array(_paths, enemyCount + (smallEnemyLife != 0), Path_size)
 
 	setMemory(_tempArray, memory[_paths + Array_length], false) # true for existence of path in <index>-nd lane
 	i -> 0
@@ -272,12 +285,13 @@ def initPaths()
 				newPathSet -> true
 		i -> i + 1
 
-def initEnemies()
-	Array(_enemies, memory[_enemyCount], Enemy_size)
+	Array(_enemies, memory[_paths + Array_length], Enemy_size)
 	i -> 0
-	while i < memory[_enemies + Array_length]
-		Enemy(Array_at(_enemies, i), 1, Array_at(_paths, i))
+	while i < enemyCount
+		Enemy(Array_at(_enemies, i), life, Array_at(_paths, i))
 		i -> i + 1
+	if smallEnemyLife != 0
+		Enemy(Array_at(_enemies, i), smallEnemyLife, Array_at(_paths, i))
 
 def bulletExplode(_bullet)
 	i -> 0

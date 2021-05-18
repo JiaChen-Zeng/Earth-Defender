@@ -9,7 +9,16 @@ const TOWER_Y -> SCREEN_HEIGHT - TOWER_HEIGHT
 const TOWER_LEVEL_MAX -> 10 # level 0 for empty tower
 const TOWER_COLOR_EMPTY -> 777777
 const TOWER_COLOR_HIT -> 444444
-const TOWER_SPEED -> 30
+memory[_towerSpeed] -> 45
+memory[_towerSpeed + 1] -> 30
+memory[_towerSpeed + 2] -> 21
+memory[_towerSpeed + 3] -> 17
+memory[_towerSpeed + 4] -> 14
+memory[_towerSpeed + 5] -> 11
+memory[_towerSpeed + 6] -> 10
+memory[_towerSpeed + 7] -> 9
+memory[_towerSpeed + 8] -> 8
+memory[_towerSpeed + 9] -> 7
 
 def Tower(this, index, level)
 	memory[this + Tower_index] -> index
@@ -31,9 +40,6 @@ def Tower_draw(this)
 def Tower_drawInternal(this, color)
 	drawRect(getLaneX(memory[this + Tower_index]), TOWER_Y, TOWER_WIDTH, TOWER_HEIGHT, color)
 
-def Tower_levelUp(this)
-	# TODO: change time according to changed speed
-
 def Tower_hit(this)
 	memory[this + Tower_level] -> max(memory[this + Tower_level] - 1, 0)
 	Tower_drawInternal(this, TOWER_COLOR_HIT)
@@ -42,4 +48,4 @@ def Tower_hit(this)
 		onTowerDestroyed(memory[this + Tower_index])
 
 def Tower_getShootingSpeed(this)
-	out -> TOWER_SPEED - (memory[this + Tower_level] * 2)
+	out -> memory[_towerSpeed + memory[this + Tower_level] - 1]
