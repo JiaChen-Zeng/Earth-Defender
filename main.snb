@@ -210,8 +210,18 @@ def drawTowers()
 
 const TOWER_SELECTOR_Y -> SCREEN_HEIGHT - 20
 const TOWER_SELECTOR_RADIUS -> 3
+const TOWER_SELECTOR_COLOR -> 222222
 def drawTowerSelector()
-	drawCircle(getLaneMiddleX(memory[_selectedTowerIndex]), TOWER_SELECTOR_Y, TOWER_SELECTOR_RADIUS, 777777)
+	x -> getLaneMiddleX(memory[_selectedTowerIndex])
+	drawPixel(x, TOWER_SELECTOR_Y, TOWER_SELECTOR_COLOR)
+	drawPixel(x, TOWER_SELECTOR_Y + 1, TOWER_SELECTOR_COLOR)
+	drawPixel(x, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
+	drawPixel(x, TOWER_SELECTOR_Y + 3, TOWER_SELECTOR_COLOR)
+	drawPixel(x, TOWER_SELECTOR_Y + 4, TOWER_SELECTOR_COLOR)
+	drawPixel(x - 1, TOWER_SELECTOR_Y + 3, TOWER_SELECTOR_COLOR)
+	drawPixel(x + 1, TOWER_SELECTOR_Y + 3, TOWER_SELECTOR_COLOR)
+	drawPixel(x - 2, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
+	drawPixel(x + 2, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
 
 def drawPaths()
 	i -> 0
