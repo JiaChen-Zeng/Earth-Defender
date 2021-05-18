@@ -2,24 +2,17 @@ include "lib/core.snb"
 
 #================interpreter bug================
 
-if (0 < 1) = 0
-	memory[200000] -> 0
-
-if (0 <= 1) = 0 # ?
-	# memory[200001] -> 0 
-
-if (1 > 0) = 0
-	memory[200002] -> 0
-
-if (1 >= 0) = 0 # ?
-	# memory[200003] -> 0
+assertEx(0 < 1, 200000)
+assertEx(0 <= 1, 200001)
+assertEx(1 > 0, 200002)
+assertEx(1 >= 0, 200003)
 
 #===================random======================
 
 # won't produce negative value
 i -> 0
 while i < 100000
-	assertEx(random(99999) > 0, 200004)
+	assertEx(0 <= random(99999), 200004)
 	i -> i + 1
 
 #===================pow======================

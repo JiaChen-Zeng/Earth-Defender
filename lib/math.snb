@@ -1,5 +1,9 @@
-def mod(a, b)
+def remainder(a, b)
 	out -> a - (a / b * b)
+
+def mod(a, b)
+	r -> remainder(a, b)
+	out -> cond(r < 0, r + b, r)
 
 def max(a, b)
 	out -> cond(a < b, b, a)
@@ -28,10 +32,10 @@ def sqrt(number)
 		nextX -> (x + (number / x)) / 2
 	out -> x
 
-# Credit: Stephen J. Chapman. "Example 6.4 – Random Number Generator". "MATLAB Programming for Engineers". 2015. pp. 253–256.
-const RANDOM_MULTIPLIER -> 8121
-const RANDOM_INCREMENT -> 28411
-const RANDOM_MODULUS -> 134456
+# Microsoft Visual Basic (6 and earlier)
+memory[_randomMultipier] -> 228134297 * 5
+const RANDOM_INCREMENT -> 12820163
+const RANDOM_MODULUS -> 16777216
 def random(number)
-	memory[_randomSeed] -> mod(RANDOM_MULTIPLIER * memory[_randomSeed] + RANDOM_INCREMENT, RANDOM_MODULUS)
+	memory[_randomSeed] -> mod(memory[_randomMultipier] * memory[_randomSeed] + RANDOM_INCREMENT, RANDOM_MODULUS)
 	out -> mod(memory[_randomSeed], number)

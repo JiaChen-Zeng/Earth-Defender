@@ -11,4 +11,5 @@ include "graphics.snb"
 
 const _math_var -> _graphics_var + 200 # reserve for 200 vars
 const _randomSeed -> _math_var # 1 var
+const _randomMultipier -> _randomSeed + 1 # 1 var
 include "math.snb"
