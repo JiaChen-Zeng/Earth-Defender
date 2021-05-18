@@ -1,27 +1,29 @@
-const Enemy_size -> 8
+const Enemy_size -> 9
 const Enemy_life -> 0
 const Enemy__path -> 1
 const Enemy_x -> 2 # float
 const Enemy_y -> 4 # float
-const Enemy_speed -> 6
-const Enemy_time -> 7
+const Enemy_speedBase -> 6
+const Enemy_speedBuff -> 7
+const Enemy_time -> 8
 
 const ENEMY_RADIUS -> LANE_WIDTH / 2 - 1
 const ENEMY_SPEED_BASE -> 2 # frames per movement of 1 pixel
+const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
 
 def Enemy(this, life, _path)
-	memory[this + Enemy_life] -> life
+	memory[this + Enemy_life] -> 6
 	memory[this + Enemy__path] -> _path
 	# memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
 	Float_fromInt(this + Enemy_x, memory[_path + Path_fromX], POINT_PRECISION)
 	Float_fromInt(this + Enemy_y, memory[_path + Path_fromY], POINT_PRECISION)
-	memory[this + Enemy_speed] -> ENEMY_SPEED_BASE
+	memory[this + Enemy_speedBase] -> ENEMY_SPEED_BASE
+	memory[this + Enemy_speedBuff] -> 0
 	memory[this + Enemy_time] -> 0
 
 def Enemy_update(this)
-	# TODO: set proper time when changing speed
-	memory[this + Enemy_time] -> mod(memory[this + Enemy_time] + 1, memory[this + Enemy_speed])
+	memory[this + Enemy_time] -> mod(memory[this + Enemy_time] + 1, Enemy_getSpeed(this))
 	if memory[this + Enemy_time] = 0
 		Enemy_move(this)
 
@@ -57,6 +59,18 @@ def Enemy_hit(this)
 def Enemy_getToLane(this)
 	out -> memory[memory[this + Enemy__path] + Path_toLane]
 
+def Enemy_getSpeed(this)
+	out -> memory[this + Enemy_speedBase] + (memory[this + Enemy_speedBuff] * ENEMY_SPEED_BUFF_RATE)
+
+def Enemy_setSpeedBuff(this, value)
+	memory[this + Enemy_speedBuff] -> value
+	speed -> Enemy_getSpeed(this)
+	i -> 0
+	while i < (memory[this + Enemy_time] / speed)
+		Enemy_move(this)
+		i -> i + 1
+	memory[this + Enemy_time] -> mod(memory[this + Enemy_time], speed)
+
 def Enemy_collidedWithTower(this)
 	out -> TOWER_Y <= (Float_toInt(this + Enemy_y) + ENEMY_RADIUS)
 
@@ -64,6 +78,11 @@ def Enemy_collidedWithBullet(this, _bullet)
 	circleX -> Float_roundToInt(this + Enemy_x)
 	circleY -> Float_roundToInt(this + Enemy_y)
 	out -> or(isPointInCircle(memory[_bullet + Bullet_x], memory[_bullet + Bullet_y], circleX, circleY, ENEMY_RADIUS), isPointInCircle(memory[_bullet + Bullet_x], memory[_bullet + Bullet_y] - 1, circleX, circleY, ENEMY_RADIUS))
+
+def Enemy_collidedWithEnemy(this, _enemy)
+	offsetX -> Float_roundToInt(this + Enemy_x) - Float_roundToInt(_enemy + Enemy_x)
+	offsetY -> Float_roundToInt(this + Enemy_y) - Float_roundToInt(_enemy + Enemy_y)
+	out -> ((offsetX * offsetX) + (offsetY * offsetY)) <= (4 * ENEMY_RADIUS * ENEMY_RADIUS)
 
 def Enemy_arrived(this)
 	out -> (Float_toInt(this + Enemy_y) + ENEMY_RADIUS) = (SCREEN_HEIGHT - 1)

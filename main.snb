@@ -67,6 +67,7 @@ def update()
 		updateTowers()
 		updateBullets()
 		updateEnemies()
+		handleEnemiesEnemiesCollision()
 		handleEnemiesTowersCollision()
 		handleEnemiesBulletsCollision()
 		if anyEnemyExists() = false
@@ -95,6 +96,25 @@ def updateBullets()
 		if Bullet_isLive(_bullet)
 			Bullet_update(_bullet)
 		i -> i + 1
+
+def handleEnemiesEnemiesCollision()
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		_enemy -> Array_at(_enemies, i)
+		if 0 < memory[_enemy + Enemy_life]
+			handleEnemyEnemiesCollision(_enemy, i)
+		i -> i + 1
+
+def handleEnemyEnemiesCollision(_enemy, index)
+	speedBuff -> 0
+	i -> 0
+	while i < memory[_enemies + Array_length]
+		if i != index
+			_otherEnemy -> Array_at(_enemies, i)
+			if and(0 < memory[_otherEnemy + Enemy_life], Enemy_collidedWithEnemy(_enemy, _otherEnemy))
+				speedBuff -> speedBuff + 1
+		i -> i + 1
+	Enemy_setSpeedBuff(_enemy, speedBuff)
 
 def handleEnemiesTowersCollision()
 	i -> 0
