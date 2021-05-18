@@ -49,7 +49,7 @@ def main()
 
 def update()
 	if memory[_state] = STATE_INITIAL
-		if keyPressed(KEY_ENTER)
+		if keyPressed(KEY_SPACE)
 			enterReady()
 
 	if memory[_state] = STATE_READY
@@ -57,13 +57,15 @@ def update()
 			memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
 		if keyPressed(KEY_RIGHT)
 			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT - 1)
-		if and(keyPressed(KEY_SPACE), 0 < memory[_gold])
-			_towerLevel -> Array_at(_towers, memory[_selectedTowerIndex]) + Tower_level
-			if (memory[_towerLevel] + 1) <= TOWER_LEVEL_MAX
-				memory[_gold] -> memory[_gold] - 1
-				memory[_towerLevel] -> memory[_towerLevel] + 1
 
-		if keyPressed(KEY_ENTER)
+		if and(keyPressed(KEY_UP), 0 < memory[_gold])
+			if Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), 1)
+				memory[_gold] -> memory[_gold] - 1
+		if keyPressed(KEY_DOWN)
+			if Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), -1)
+				memory[_gold] -> memory[_gold] + 1
+
+		if keyPressed(KEY_SPACE)
 			enterBattle()
 
 	if memory[_state] = STATE_BATTLE

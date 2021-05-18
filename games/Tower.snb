@@ -40,6 +40,13 @@ def Tower_draw(this)
 def Tower_drawInternal(this, color)
 	drawRect(getLaneX(memory[this + Tower_index]), TOWER_Y, TOWER_WIDTH, TOWER_HEIGHT, color)
 
+def Tower_addLevel(this, difference)
+	out -> false
+	newLevel -> memory[this + Tower_level] + difference
+	if and(0 <= newLevel, newLevel <= TOWER_LEVEL_MAX)
+		memory[this + Tower_level] -> newLevel
+		out -> true
+
 def Tower_hit(this)
 	memory[this + Tower_level] -> max(memory[this + Tower_level] - 1, 0)
 	Tower_drawInternal(this, TOWER_COLOR_HIT)
