@@ -35,6 +35,9 @@ def playInvalidActionSound()
 def playGoldSound()
 	playSound(CHANNEL_UI, 2000, 80, VOLUME_DEFAULT)
 
+def playNoTowerPenaltySound(index)
+	playSound(CHANNEL_UI, 300 - (index * 100), 30, VOLUME_DEFAULT)
+
 def playEnemyHitSound()
 	playSound(CHANNEL_GAME_SHORT, 700, 300, VOLUME_DEFAULT)
 

@@ -1,0 +1,122 @@
+def penAt(x, y)
+	memory[_PEN_X] -> x
+	memory[_PEN_Y] -> y
+
+def penColor(color)
+	memory[_PEN_COLOR] -> color
+
+def writeA()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 2, y, x + 2, y + 4, color)
+	drawPixel(x + 1, y, color)
+	drawPixel(x + 1, y + 2, color)
+	writeSpaceInternal(4)
+
+def writeC()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 1, y, x + 2, y, color)
+	drawLine(x + 1, y + 4, x + 2, y + 4, color)
+	writeSpaceInternal(4)
+
+def writeE()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 1, y, x + 2, y, color)
+	drawLine(x + 1, y + 4, x + 2, y + 4, color)
+	drawPixel(x + 1, y + 2, color)
+	writeSpaceInternal(4)
+
+def writeG()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 3, y + 2, x + 3, y + 4, color)
+	drawLine(x + 1, y, x + 3, y, color)
+	drawLine(x + 1, y + 4, x + 2, y + 4, color)
+	drawPixel(x + 2, y + 2, color)
+	writeSpaceInternal(5)
+
+def writeM()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 4, y, x + 4, y + 4, color)
+	drawPixel(x + 1, y + 1, color)
+	drawPixel(x + 2, y + 2, color)
+	drawPixel(x + 3, y + 1, color)
+	writeSpaceInternal(6)
+
+def writeO()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 2, y, x + 2, y + 4, color)
+	drawPixel(x + 1, y, color)
+	drawPixel(x + 1, y + 4, color)
+	writeSpaceInternal(4)
+
+def writeP()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 2, y, x + 2, y + 2, color)
+	drawPixel(x + 1, y, color)
+	drawPixel(x + 1, y + 2, color)
+	writeSpaceInternal(4)
+
+def writeR()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 2, y, x + 2, y + 1, color)
+	drawLine(x + 2, y + 3, x + 2, y + 4, color)
+	drawPixel(x + 1, y, color)
+	drawPixel(x + 1, y + 2, color)
+	writeSpaceInternal(4)
+
+def writeS()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 2, color)
+	drawLine(x + 2, y + 2, x + 2, y + 4, color)
+	drawLine(x + 1, y, x + 2, y, color)
+	drawLine(x, y + 4, x + 1, y + 4, color)
+	drawPixel(x + 1, y + 2, color)
+	writeSpaceInternal(4)
+
+def writeT()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x + 2, y, color)
+	drawLine(x + 1, y + 1, x + 1, y + 4, color)
+	writeSpaceInternal(4)
+
+def writeV()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 3, color)
+	drawLine(x + 2, y, x + 2, y + 3, color)
+	drawLine(x + 1, y + 3, x + 1, y + 4, color)
+	writeSpaceInternal(4)
+
+def writeSpace()
+	writeSpaceInternal(2)
+
+def writeSpaceInternal(space)
+	memory[_PEN_X] -> memory[_PEN_X] + space

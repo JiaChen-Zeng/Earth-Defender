@@ -17,10 +17,11 @@ setManualFlush(true)
 const STATE_INITIAL -> 0
 const STATE_READY -> 1
 const STATE_BATTLE -> 2
-const STATE_GAMEOVER -> 3
+const STATE_GAME_OVER -> 3
 
 const GOLD_INITIAL -> 5
 const GOLD_MAX -> 50
+const GOLD_NO_TOWER_PENALTY -> 3
 
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
@@ -72,11 +73,15 @@ def update()
 			if goldEnough = false
 				playInvalidActionSound()
 		if keyPressed(KEY_DOWN)
-			canLevelDown -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), -1)
-			if canLevelDown
-				memory[_gold] -> memory[_gold] + 1
-				playActionSound()
-			if canLevelDown = false
+			goldTooMuch -> GOLD_MAX <= memory[_gold]
+			if goldTooMuch = false
+				canLevelDown -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), -1)
+				if canLevelDown
+					memory[_gold] -> memory[_gold] + 1
+					playActionSound()
+				if canLevelDown = false
+					playInvalidActionSound()
+			if goldTooMuch
 				playInvalidActionSound()
 
 		if keyPressed(KEY_SPACE)
@@ -97,7 +102,23 @@ def update()
 			if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
 				throwError(ERROR_NOT_IMPLEMENTED)
 			if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
-				enterReady()
+				if anyTowerExists() = false
+					i -> 0
+					while i < GOLD_NO_TOWER_PENALTY
+						memory[_gold] -> max(memory[_gold] - 1, 0)
+						playNoTowerPenaltySound(i)
+						draw()
+						sleep(20)
+						i -> i + 1
+				if 0 < memory[_gold]
+					enterReady()
+				if memory[_gold] <= 0
+					enterGameOver()
+
+	if memory[_state] = STATE_GAME_OVER
+		if keyPressed(KEY_SPACE)
+			enterInitial()
+			enterReady()
 
 def updateEnemies()
 	i -> 0
@@ -185,10 +206,15 @@ def enterBattle()
 	memory[_state] -> STATE_BATTLE
 	initBullets()
 
+def enterGameOver()
+	memory[_state] -> STATE_GAME_OVER
+	playGameOverSound()
+
 def draw()
 	clear()
 	drawTowers()
 	if memory[_state] = STATE_INITIAL
+		writeSpaceHint(12, SCREEN_HEIGHT / 2 + 16)
 
 	if memory[_state] = STATE_READY
 		drawTowerSelector()
@@ -198,6 +224,13 @@ def draw()
 		drawPaths()
 		drawEnemies()
 		drawBullets()
+
+	if memory[_state] = STATE_GAME_OVER
+		drawPaths()
+		drawEnemies()
+		drawBullets()
+		writeGameOver(30, SCREEN_HEIGHT / 2 - 6)
+		writeSpaceHint(12, SCREEN_HEIGHT / 2 + 16)
 
 	drawUI()
 

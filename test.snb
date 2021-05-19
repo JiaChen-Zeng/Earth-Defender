@@ -31,5 +31,23 @@ assertEx(sqrt(4) = 2, 200009)
 
 assertEx(4073741823 = 4073741823, 200010)
 
-testSound()
+#===================max arguments length======================
+
+def testArg(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z)
+	memory[a] -> a
+	memory[m] -> m
+	memory[z] -> z
+testArg(1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8)
+assertEx(memory[1] = 1, 200011)
+assertEx(memory[4] = 4, 200012)
+assertEx(memory[8] = 8, 200013)
+
+#===================playground======================
+
+playNoTowerPenaltySound(0)
+sleep(30)
+playNoTowerPenaltySound(1)
+sleep(30)
+playNoTowerPenaltySound(2)
+sleep(30)
 sleep(120)

@@ -22,3 +22,48 @@ def isPointInCircle(x, y, circleX, circleY, radius)
 	offsetX -> circleX - x
 	offsetY -> circleY - y
 	out -> ((offsetX * offsetX) + (offsetY * offsetY)) <= (radius * radius)
+
+const SPACE_HINT_COLOR_DARK -> 000000
+const SPACE_HINT_COLOR_LIGHT -> 224444
+const SPACE_HINT_COLOR_RATE -> 10
+memory[_spaceHintColor] -> SPACE_HINT_COLOR_DARK
+def writeSpaceHint(x, y)
+	penAt(x, y)
+	memory[_spaceHintTime] -> remainder(memory[_spaceHintTime] + 1, SPACE_HINT_COLOR_RATE)
+	if memory[_spaceHintTime] = 0
+		memory[_spaceHintColor] -> cond(memory[_spaceHintColor] = SPACE_HINT_COLOR_DARK, SPACE_HINT_COLOR_LIGHT, SPACE_HINT_COLOR_DARK)
+	penColor(memory[_spaceHintColor])
+	writeP()
+	writeR()
+	writeE()
+	writeS()
+	writeS()
+	writeSpace()
+	writeS()
+	writeP()
+	writeA()
+	writeC()
+	writeE()
+	writeSpace()
+	writeT()
+	writeO()
+	writeSpace()
+	writeS()
+	writeT()
+	writeA()
+	writeR()
+	writeT()
+
+const GAME_OVER_COLOR -> 000000
+def writeGameOver(x, y)
+	penAt(x, y)
+	penColor(GAME_OVER_COLOR)
+	writeG()
+	writeA()
+	writeM()
+	writeE()
+	writeSpace()
+	writeO()
+	writeV()
+	writeE()
+	writeR()

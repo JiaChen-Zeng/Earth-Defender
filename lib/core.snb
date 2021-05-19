@@ -9,7 +9,13 @@ include "lang.snb"
 const _graphics_var -> _lang_var + 1200 # reserve for 200 vars
 include "graphics.snb"
 
-const _math_var -> _graphics_var + 200 # reserve for 200 vars
+const _char_var -> _graphics_var + 200
+include "char.snb"
+const _PEN_X -> _char_var
+const _PEN_Y -> _PEN_X + 1
+const _PEN_COLOR -> _PEN_Y + 1
+
+const _math_var -> _char_var + 200 # reserve for 200 vars
 const _randomSeed -> _math_var # 1 var
 const _randomMultipier -> _randomSeed + 1 # 1 var
 include "math.snb"
