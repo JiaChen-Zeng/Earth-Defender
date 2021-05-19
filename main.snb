@@ -66,7 +66,10 @@ def update()
 				memory[_gold] -> memory[_gold] + 1
 
 		if keyPressed(KEY_SPACE)
-			enterBattle()
+			exists -> anyTowerExists()
+			if exists
+				enterBattle()
+			if exists = false
 
 	if memory[_state] = STATE_BATTLE
 		updateTowers()
