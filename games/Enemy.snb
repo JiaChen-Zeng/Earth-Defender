@@ -70,6 +70,7 @@ def Enemy_move(this)
 def Enemy_hit(this)
 	memory[this + Enemy_life] -> memory[this + Enemy_life] - 1
 	Enemy_animateHit(this)
+	playEnemyHitSound()
 	if memory[this + Enemy_life] = 0
 		onEnemyKilled(this)
 

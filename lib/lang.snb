@@ -70,6 +70,12 @@ def keyPressed(key)
 	out -> and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key])
 	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
 
+def playSound(channel, frequency, attenuation, volume)
+	assertEx(and(0 <= channel, channel <= 2), ERROR_ILLEGAL_ARGUMENT)
+	memory[55006 + channel] -> frequency
+	memory[55009 + channel] -> attenuation
+	memory[55012 + channel] -> volume
+
 def assert(condition)
 	assertEx(condition, ERROR_ASSERT)
 

@@ -1,0 +1,48 @@
+const CHANNEL_UI -> 0
+const CHANNEL_GAME_SHORT -> 1
+const CHANNEL_GAME_LONG -> 2
+
+const VOLUME_DEFAULT -> 100000
+
+def testSound()
+	playGameOverSound()
+	# playInvalidActionSound()
+	# i -> 0
+	# while i < 5
+	# 	playEnemyHitSound()
+	# 	i -> i + 1
+
+def playGameStartSound()
+	playSound(CHANNEL_UI, 600, 50, VOLUME_DEFAULT)
+	sleep(5)
+	playSound(CHANNEL_UI, 800, 50, VOLUME_DEFAULT)
+	sleep(5)
+	playSound(CHANNEL_UI, 1200, 30, VOLUME_DEFAULT)
+
+def playGameOverSound()
+	playSound(CHANNEL_UI, 800, 50, VOLUME_DEFAULT)
+	sleep(5)
+	playSound(CHANNEL_UI, 600, 50, VOLUME_DEFAULT)
+	sleep(5)
+	playSound(CHANNEL_UI, 200, 30, VOLUME_DEFAULT)
+
+def playActionSound()
+	playSound(CHANNEL_UI, 400, 80, VOLUME_DEFAULT)
+
+def playInvalidActionSound()
+	playSound(CHANNEL_UI, 200, 80, VOLUME_DEFAULT)
+
+def playGoldSound()
+	playSound(CHANNEL_UI, 2000, 80, VOLUME_DEFAULT)
+
+def playEnemyHitSound()
+	playSound(CHANNEL_GAME_SHORT, 700, 300, VOLUME_DEFAULT)
+
+def playEnemyExplodeSound()
+	playSound(CHANNEL_GAME_SHORT, 150, 10, VOLUME_DEFAULT)
+
+def playTowerHitSound()
+	i -> 0
+	while i < 3
+		playSound(CHANNEL_GAME_LONG, 150 - (i * 20), 20, VOLUME_DEFAULT)
+		i -> i + 1
