@@ -42,12 +42,15 @@ assertEx(memory[1] = 1, 200011)
 assertEx(memory[4] = 4, 200012)
 assertEx(memory[8] = 8, 200013)
 
-#===================playground======================
+#===================triangular functions======================
 
-playNoTowerPenaltySound(0)
-sleep(30)
-playNoTowerPenaltySound(1)
-sleep(30)
-playNoTowerPenaltySound(2)
-sleep(30)
-sleep(120)
+assertEx(and((PI / 6) < atan2(1, 1), atan2(1, 1) < (PI / 2)), 200014)
+assertEx(cos(PI / 2) = 0, 200015)
+assertEx(cos(60) = 82, 200016)
+assertEx(cos(60 + PI) = -82, 200017)
+assertEx(cos(60 + (3 * PI)) = -82, 200018)
+assertEx(sin(0) = 0, 200019)
+assertEx(sin(PI / 2) = 100, 200020)
+assertEx(sin(7 * PI / 2) = -100, 200021)
+
+#===================playground======================

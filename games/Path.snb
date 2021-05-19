@@ -9,6 +9,8 @@ const Path_fromSpot -> 6
 const Path_toSpot -> 7
 
 const PATH_COLOR -> 896464
+const PATH_ARROW_ANGLE -> PI / 5
+const PATH_ARROW_LENGTH -> 6
 
 def Path(this, fromLane, toLane, fromSpot, toSpot)
 	memory[this + Path_fromX] -> getLaneMiddleX(fromLane)
@@ -22,7 +24,14 @@ def Path(this, fromLane, toLane, fromSpot, toSpot)
 	memory[this + Path_toSpot] -> toSpot
 
 def Path_draw(this)
-	drawLine(memory[this + Path_fromX], memory[this + Path_fromY], memory[this + Path_toX], memory[this + Path_toY], PATH_COLOR)
+	fromX -> memory[this + Path_fromX]
+	fromY -> memory[this + Path_fromY]
+	toX -> memory[this + Path_toX]
+	toY -> memory[this + Path_toY]
+	drawLine(fromX, fromY, toX, toY, PATH_COLOR)
+	angle -> atan2((fromY - toY) * 100, (fromX - toX) * 100)
+	drawLine(toX, toY, toX + (cos(angle + PATH_ARROW_ANGLE) * PATH_ARROW_LENGTH / 100), toY + (sin(angle + PATH_ARROW_ANGLE) * PATH_ARROW_LENGTH / 100), PATH_COLOR)
+	drawLine(toX, toY, toX + (cos(angle - PATH_ARROW_ANGLE) * PATH_ARROW_LENGTH / 100), toY + (sin(angle - PATH_ARROW_ANGLE) * PATH_ARROW_LENGTH / 100), PATH_COLOR)
 
 def Path_inPath(this, x, y)
 	out -> and(or(and(memory[this + Path_fromX] <= x, x <= memory[this + Path_toX]), and(memory[this + Path_toX] <= x, x <= memory[this + Path_fromX])), and(memory[this + Path_fromY] <= y, y <= memory[this + Path_toY]))

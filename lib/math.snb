@@ -22,6 +22,49 @@ def pow(base, power)
 		power -> power - 1
 	out -> number
 
+# ALL TRIANGULAR FUNCTIONS TAKE AND RETURN INTEGER * 100 AS FLOATS
+const PI -> 314
+# Bhaskara approximation
+def cos(n)
+	sign -> 1
+	n -> mod(n, 2 * PI)
+	if and((PI / 2) < n, n < (3 * PI / 2))
+		n -> n - PI
+		sign -> -1
+	if and((3 * PI / 2) <= n, n < (2 * PI))
+		n -> 2 * PI - n
+	out -> sign * (9869600 - (400 * n * n)) / (98696 + (n * n))
+
+def sin(n)
+	out -> cos(PI / 2 - n)
+
+# credit: https://www.dsprelated.com/showarticle/1052.php
+def atan(n)
+	out -> (97 * n / 100) - (19 * n * n * n / 1000000)
+
+def atan2(y, x)
+	out -> 0
+	if x != 0
+		if abs(x) > abs(y)
+			z -> 100 * y / x
+			if x > 0
+				out -> atan(z)
+			if and((x > 0) = false, y >= 0)
+				out -> atan(z) + PI
+			if and((x > 0) = false, (y >= 0) = false)
+				out -> atan(z) - PI
+		if (abs(x) > abs(y)) = false
+			z -> 100 * x / y
+			if y > 0
+				out -> -atan(z) + (PI / 2)
+			if (y > 0) = false
+				out -> -atan(z) - (PI / 2)
+	if x = 0
+		if (y > 0)
+			out -> PI / 2
+		if (y < 0)
+			out -> -PI / 2
+
 # Babylonian method
 def sqrt(number)
 	assertEx(-1 < number, ERROR_ILLEGAL_ARGUMENT)
