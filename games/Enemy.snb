@@ -18,7 +18,6 @@ const ENEMY_COLOR_EYE -> 000000
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> life
 	memory[this + Enemy__path] -> _path
-	# memory[this + Enemy_x] -> getLaneX(0) + ENEMY_RADIUS
 	Float_fromInt(this + Enemy_x, memory[_path + Path_fromX], POINT_PRECISION)
 	Float_fromInt(this + Enemy_y, memory[_path + Path_fromY], POINT_PRECISION)
 	memory[this + Enemy_speedBase] -> ENEMY_SPEED_BASE
@@ -67,8 +66,8 @@ def Enemy_move(this)
 	if InPath = false
 		Float_addInt(this + Enemy_y, 1)
 
-def Enemy_hit(this)
-	memory[this + Enemy_life] -> memory[this + Enemy_life] - 1
+def Enemy_hit(this, damage)
+	memory[this + Enemy_life] -> memory[this + Enemy_life] - damage
 	Enemy_animateHit(this)
 	playEnemyHitSound()
 	if memory[this + Enemy_life] = 0
@@ -89,6 +88,9 @@ def Enemy_setSpeedBuff(this, value)
 		i -> i + 1
 	memory[this + Enemy_time] -> mod(memory[this + Enemy_time], speed)
 
+def Enemy_collidedWithUltimate(this, y)
+	out -> or(Enemy_acrossY(this, y), Enemy_acrossY(this, y + 3))
+
 def Enemy_collidedWithTower(this)
 	out -> TOWER_Y <= (Float_toInt(this + Enemy_y) + ENEMY_RADIUS)
 
@@ -104,3 +106,7 @@ def Enemy_collidedWithEnemy(this, _enemy)
 
 def Enemy_arrived(this)
 	out -> (Float_roundToInt(this + Enemy_y) + ENEMY_RADIUS) = (SCREEN_HEIGHT - 1)
+
+def Enemy_acrossY(this, y)
+	_y -> Float_roundToInt(this + Enemy_y)
+	out -> and((_y - ENEMY_RADIUS) <= y, y <= (_y + ENEMY_RADIUS))

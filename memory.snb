@@ -4,6 +4,7 @@ const _selectedTowerIndex -> 2
 const _enemyLifeTotal -> 3
 const _spaceHintColor -> 4
 const _spaceHintTime -> 5
+const _ultimateAvailable -> 6
 
 const _towerSpeed -> 1000 # 10 vars
 const _colors -> _towerSpeed + 10

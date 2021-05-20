@@ -44,6 +44,9 @@ def playEnemyHitSound()
 def playEnemyExplodeSound()
 	playSound(CHANNEL_GAME_SHORT, 150, 10, VOLUME_DEFAULT)
 
+def playUltimateSound()
+	playSound(CHANNEL_GAME_LONG, 1000, 300, VOLUME_DEFAULT / 2)
+
 def playTowerHitSound()
 	i -> 0
 	while i < 3

@@ -23,6 +23,11 @@ const GOLD_INITIAL -> 5
 const GOLD_MAX -> 50
 const GOLD_NO_TOWER_PENALTY -> 3
 
+const ULTIMATE_GOLD -> 3
+const ULTIMATE_INDEX -> LANE_COUNT
+const ULTIMATE_DAMAGE_RATE -> 10
+memory[_ultimateAvailable] -> true
+
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
 const ENEMY_LIFE_TOTAL_MAX -> 50 * 7
@@ -59,30 +64,50 @@ def update()
 		if keyPressed(KEY_LEFT)
 			memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
 		if keyPressed(KEY_RIGHT)
-			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT - 1)
+			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT)
 
 		if keyPressed(KEY_UP)
-			goldEnough -> 0 < memory[_gold]
-			if goldEnough
-				canLevelUp -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), 1)
-				if canLevelUp
-					memory[_gold] -> memory[_gold] - 1
+			if memory[_selectedTowerIndex] = ULTIMATE_INDEX
+				canBuyUltimate -> and(ULTIMATE_GOLD <= memory[_gold], memory[_ultimateAvailable] = false)
+				if canBuyUltimate
+					memory[_gold] -> memory[_gold] - ULTIMATE_GOLD
+					memory[_ultimateAvailable] -> true
 					playActionSound()
-				if canLevelUp = false
+				if canBuyUltimate = false
 					playInvalidActionSound()
-			if goldEnough = false
-				playInvalidActionSound()
+
+			if memory[_selectedTowerIndex] != ULTIMATE_INDEX
+				goldEnough -> 0 < memory[_gold]
+				if goldEnough
+					canLevelUp -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), 1)
+					if canLevelUp
+						memory[_gold] -> memory[_gold] - 1
+						playActionSound()
+					if canLevelUp = false
+						playInvalidActionSound()
+				if goldEnough = false
+					playInvalidActionSound()
 		if keyPressed(KEY_DOWN)
-			goldTooMuch -> GOLD_MAX <= memory[_gold]
-			if goldTooMuch = false
-				canLevelDown -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), -1)
-				if canLevelDown
-					memory[_gold] -> memory[_gold] + 1
+			if memory[_selectedTowerIndex] = ULTIMATE_INDEX
+				canSellUltimate -> and((memory[_gold] + ULTIMATE_GOLD) <= GOLD_MAX, memory[_ultimateAvailable])
+				if canSellUltimate
+					memory[_gold] -> memory[_gold] + ULTIMATE_GOLD
+					memory[_ultimateAvailable] -> false
 					playActionSound()
-				if canLevelDown = false
+				if canSellUltimate = false
 					playInvalidActionSound()
-			if goldTooMuch
-				playInvalidActionSound()
+
+			if memory[_selectedTowerIndex] != ULTIMATE_INDEX
+				goldTooMuch -> GOLD_MAX <= memory[_gold]
+				if goldTooMuch = false
+					canLevelDown -> Tower_addLevel(Array_at(_towers, memory[_selectedTowerIndex]), -1)
+					if canLevelDown
+						memory[_gold] -> memory[_gold] + 1
+						playActionSound()
+					if canLevelDown = false
+						playInvalidActionSound()
+				if goldTooMuch
+					playInvalidActionSound()
 
 		if keyPressed(KEY_SPACE)
 			exists -> anyTowerExists()
@@ -92,6 +117,12 @@ def update()
 				playInvalidActionSound()
 
 	if memory[_state] = STATE_BATTLE
+		if keyPressed(KEY_SPACE)
+			if memory[_ultimateAvailable]
+				useUltimate()
+			if memory[_ultimateAvailable] = false
+				playInvalidActionSound()
+
 		updateTowers()
 		updateBullets()
 		updateEnemies()
@@ -213,6 +244,7 @@ def enterGameOver()
 def draw()
 	clear()
 	drawTowers()
+	drawUltimateIcon()
 	if memory[_state] = STATE_INITIAL
 		writeSpaceHint(12, SCREEN_HEIGHT / 2 + 16)
 
@@ -260,17 +292,37 @@ def drawGoldIndicator(index) # index increase from bottom to top
 	if -1 < level
 		drawRect(GOLD_INDICATOR_X, GOLD_INDICATOR_Y - ((GOLD_INDICATOR_SPACE + GOLD_INDICATOR_HEIGHT) * index), GOLD_INDICATOR_WIDTH, GOLD_INDICATOR_HEIGHT, memory[_colors + level])
 
+const ULTIMATE_ICON_WIDTH -> 6
+const ULTIMATE_ICON_HEIGHT -> 6
+const ULTIMATE_ICON_X -> GOLD_BAR_X
+const ULTIMATE_ICON_Y -> SCREEN_HEIGHT - ULTIMATE_ICON_HEIGHT - 4
+const ULTIMATE_COLOR_BEAM_MAIN -> 728792
+const ULTIMATE_COLOR_BEAM_BORDER -> 637392
+const ULTIMATE_COLOR_BEAM_CONTRAIL -> 828591
+const ULTIMATE_COLOR_UNAVAILABLE -> TOWER_COLOR_EMPTY
+def drawUltimateIcon()
+	drawLine(ULTIMATE_ICON_X, ULTIMATE_ICON_Y, ULTIMATE_ICON_X + ULTIMATE_ICON_WIDTH, ULTIMATE_ICON_Y, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_BORDER, ULTIMATE_COLOR_UNAVAILABLE))
+	drawLine(ULTIMATE_ICON_X, ULTIMATE_ICON_Y + 1, ULTIMATE_ICON_X + ULTIMATE_ICON_WIDTH, ULTIMATE_ICON_Y + 1, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_MAIN, ULTIMATE_COLOR_UNAVAILABLE))
+	drawLine(ULTIMATE_ICON_X, ULTIMATE_ICON_Y + 2, ULTIMATE_ICON_X + ULTIMATE_ICON_WIDTH, ULTIMATE_ICON_Y + 2, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_BORDER, ULTIMATE_COLOR_UNAVAILABLE))
+
+	drawLine(ULTIMATE_ICON_X + (ULTIMATE_ICON_WIDTH / 2), ULTIMATE_ICON_Y + 3, ULTIMATE_ICON_X + (ULTIMATE_ICON_WIDTH / 2), ULTIMATE_ICON_Y + ULTIMATE_ICON_HEIGHT, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_CONTRAIL, ULTIMATE_COLOR_UNAVAILABLE))
+	drawLine(ULTIMATE_ICON_X + 1, ULTIMATE_ICON_Y + 3, ULTIMATE_ICON_X + 1, ULTIMATE_ICON_Y + ULTIMATE_ICON_HEIGHT, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_CONTRAIL, ULTIMATE_COLOR_UNAVAILABLE))
+	drawLine(ULTIMATE_ICON_X + ULTIMATE_ICON_WIDTH - 1, ULTIMATE_ICON_Y + 3, ULTIMATE_ICON_X + ULTIMATE_ICON_WIDTH - 1, ULTIMATE_ICON_Y + ULTIMATE_ICON_HEIGHT, cond(memory[_ultimateAvailable], ULTIMATE_COLOR_BEAM_CONTRAIL, ULTIMATE_COLOR_UNAVAILABLE))
+
 def drawTowers()
 	i -> 0
 	while i < memory[_towers + Array_length]
 		Tower_draw(Array_at(_towers, i))
 		i -> i + 1
 
+const TOWER_SELECTOR_X_ULTIMATE -> SCREEN_WIDTH - 5
 const TOWER_SELECTOR_Y -> SCREEN_HEIGHT - 20
 const TOWER_SELECTOR_RADIUS -> 3
 const TOWER_SELECTOR_COLOR -> 222222
 def drawTowerSelector()
-	x -> getLaneMiddleX(memory[_selectedTowerIndex])
+	x -> TOWER_SELECTOR_X_ULTIMATE
+	if memory[_selectedTowerIndex] != ULTIMATE_INDEX
+		x -> getLaneMiddleX(memory[_selectedTowerIndex])
 	drawPixel(x, TOWER_SELECTOR_Y, TOWER_SELECTOR_COLOR)
 	drawPixel(x, TOWER_SELECTOR_Y + 1, TOWER_SELECTOR_COLOR)
 	drawPixel(x, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
@@ -302,6 +354,14 @@ def drawBullets()
 		if Bullet_isLive(_bullet)
 			Bullet_draw(_bullet)
 		i -> i + 1
+
+def drawUltimate(y)
+	drawLine(0, y, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y) * GOLD_BAR_WIDTH), y, ULTIMATE_COLOR_BEAM_BORDER)
+	drawLine(0, y + 1, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y + 1) * GOLD_BAR_WIDTH), y + 1, ULTIMATE_COLOR_BEAM_MAIN)
+	drawLine(0, y + 2, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y + 2) * GOLD_BAR_WIDTH), y + 2, ULTIMATE_COLOR_BEAM_BORDER)
+
+def yAcrossGoldIndicator(y)
+	out -> and(GOLD_BAR_Y <= y, y <= (GOLD_BAR_Y + GOLD_BAR_HEIGHT))
 
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
@@ -346,12 +406,38 @@ def initPathsAndEnemies()
 	if smallEnemyLife != 0
 		Enemy(Array_at(_enemies, i), smallEnemyLife, Array_at(_paths, i))
 
+def getUltimateDamage()
+	level -> 0
+	i -> 0
+	while i < LANE_COUNT
+		level -> level + memory[Array_at(_towers, i) + Tower_level]
+		i -> i + 1
+	out -> level / ULTIMATE_DAMAGE_RATE + 1
+
+const ULTIMATE_Y -> TOWER_Y - 3
+def useUltimate()
+	memory[_ultimateAvailable] -> false
+	damage -> getUltimateDamage()
+	y -> ULTIMATE_Y
+	while 0 <= y
+		drawUltimate(y)
+		flush()
+		playUltimateSound()
+		i -> 0
+		while i < memory[_enemies + Array_length]
+			_enemy -> Array_at(_enemies, i)
+			if and(0 < memory[_enemy + Enemy_life], Enemy_collidedWithUltimate(_enemy, y))
+				Enemy_hit(_enemy, damage)
+			i -> i + 1
+		draw()
+		y -> y - 2
+
 def bulletExplode(_bullet)
 	i -> 0
 	while i < memory[_enemies + Array_length]
 		_enemy -> Array_at(_enemies, i)
 		if and(0 < memory[_enemy + Enemy_life], Bullet_isEnemyInExplosion(_bullet, _enemy))
-			Enemy_hit(_enemy)
+			Enemy_hit(_enemy, 1)
 		i -> i + 1
 	Bullet_remove(_bullet)
 
