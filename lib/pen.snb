@@ -45,6 +45,14 @@ def writeG()
 	drawPixel(x + 2, y + 2, color)
 	writeSpaceInternal(5)
 
+def writeL()
+	x -> memory[_PEN_X]
+	y -> memory[_PEN_Y]
+	color -> memory[_PEN_COLOR]
+	drawLine(x, y, x, y + 4, color)
+	drawLine(x + 1, y + 4, x + 2, y + 4, color)
+	writeSpaceInternal(4)
+
 def writeM()
 	x -> memory[_PEN_X]
 	y -> memory[_PEN_Y]

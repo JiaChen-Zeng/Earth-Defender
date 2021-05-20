@@ -14,10 +14,14 @@ include "memory.snb"
 
 setManualFlush(true)
 
-const STATE_INITIAL -> 0
-const STATE_READY -> 1
-const STATE_BATTLE -> 2
-const STATE_GAME_OVER -> 3
+const STATE_NULL -> 0
+const STATE_INITIAL -> 1
+const STATE_READY -> 2
+const STATE_BATTLE -> 3
+const STATE_GAME_OVER -> 4
+const STATE_GAME_CLEAR -> 5
+
+const TIME_TO_ENTER_STATE -> 60
 
 const GOLD_INITIAL -> 5
 const GOLD_MAX -> 50
@@ -55,6 +59,8 @@ def main()
 		flush()
 
 def update()
+	tickToEnterState()
+
 	if memory[_state] = STATE_INITIAL
 		if keyPressed(KEY_SPACE)
 			enterReady()
@@ -129,10 +135,12 @@ def update()
 		handleEnemiesEnemiesCollision()
 		handleEnemiesTowersCollision()
 		handleEnemiesBulletsCollision()
-		if anyEnemyExists() = false
-			if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
-				throwError(ERROR_NOT_IMPLEMENTED)
-			if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
+		if and(anyEnemyExists() = false, memory[_stateToEnter] = STATE_NULL)
+			if true
+			# if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
+				memory[_stateToEnter] -> STATE_GAME_CLEAR
+			if false
+			# if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
 				if anyTowerExists() = false
 					i -> 0
 					while i < GOLD_NO_TOWER_PENALTY
@@ -142,14 +150,31 @@ def update()
 						sleep(20)
 						i -> i + 1
 				if 0 < memory[_gold]
-					enterReady()
+					memory[_stateToEnter] -> STATE_READY
 				if memory[_gold] <= 0
-					enterGameOver()
+					memory[_stateToEnter] -> STATE_GAME_OVER
 
-	if memory[_state] = STATE_GAME_OVER
+	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
 		if keyPressed(KEY_SPACE)
 			enterInitial()
 			enterReady()
+
+def tickToEnterState()
+	if memory[_stateToEnter]
+		memory[_timeToEnterState] -> memory[_timeToEnterState] + 1
+		if memory[_timeToEnterState] = TIME_TO_ENTER_STATE
+			memory[_timeToEnterState] -> 0
+			if memory[_stateToEnter] = STATE_INITIAL
+				enterInitial()
+			if memory[_stateToEnter] = STATE_READY
+				enterReady()
+			if memory[_stateToEnter] = STATE_BATTLE
+				enterBattle()
+			if memory[_stateToEnter] = STATE_GAME_OVER
+				enterGameOver()
+			if memory[_stateToEnter] = STATE_GAME_CLEAR
+				enterGameClear()
+			memory[_stateToEnter] -> STATE_NULL
 
 def updateEnemies()
 	i -> 0
@@ -241,12 +266,16 @@ def enterGameOver()
 	memory[_state] -> STATE_GAME_OVER
 	playGameOverSound()
 
+def enterGameClear()
+	memory[_state] -> STATE_GAME_CLEAR
+	# TODO: playGameClearSound()
+
 def draw()
 	clear()
 	drawTowers()
 	drawUltimateIcon()
 	if memory[_state] = STATE_INITIAL
-		writeSpaceHint(12, SCREEN_HEIGHT / 2 + 16)
+		writeSpaceHint()
 
 	if memory[_state] = STATE_READY
 		drawTowerSelector()
@@ -257,12 +286,15 @@ def draw()
 		drawEnemies()
 		drawBullets()
 
-	if memory[_state] = STATE_GAME_OVER
+	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
 		drawPaths()
 		drawEnemies()
 		drawBullets()
-		writeGameOver(30, SCREEN_HEIGHT / 2 - 6)
-		writeSpaceHint(12, SCREEN_HEIGHT / 2 + 16)
+		if memory[_state] = STATE_GAME_OVER
+			writeGameOver()
+		if memory[_state] = STATE_GAME_CLEAR
+			writeGameClear()
+		writeSpaceHint()
 
 	drawUI()
 

@@ -64,7 +64,8 @@ def Enemy_move(this)
 			Float_fromInt(this + Enemy_x, memory[_path + Path_toX], POINT_PRECISION)
 			Float_fromInt(this + Enemy_y, memory[_path + Path_toY] + 1, POINT_PRECISION)
 	if InPath = false
-		Float_addInt(this + Enemy_y, 1)
+		if (Float_roundToInt(this + Enemy_y) + 1) < SCREEN_HEIGHT
+			Float_addInt(this + Enemy_y, 1)
 
 def Enemy_hit(this, damage)
 	memory[this + Enemy_life] -> memory[this + Enemy_life] - damage
