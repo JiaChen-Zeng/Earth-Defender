@@ -63,6 +63,7 @@ def update()
 	tickToEnterState()
 
 	if memory[_state] = STATE_INITIAL
+		random(1) # for random seed
 		if keyPressed(KEY_SPACE)
 			enterReady()
 			playGameStartSound()
