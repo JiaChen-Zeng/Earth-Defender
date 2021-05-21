@@ -30,7 +30,7 @@ def Enemy_update(this)
 		Enemy_move(this)
 
 def Enemy_draw(this)
-	Enemy_drawInternal(this, memory[_colors + ((memory[this + Enemy_life] + 4) / 5 - 1)])
+	Enemy_drawInternal(this, memory[_colors + Enemy_getLevel(this) - 1])
 
 def Enemy_drawInternal(this, color)
 	x -> Float_roundToInt(this + Enemy_x)
@@ -73,6 +73,9 @@ def Enemy_hit(this, damage)
 	playEnemyHitSound()
 	if memory[this + Enemy_life] = 0
 		onEnemyKilled(this)
+
+def Enemy_getLevel(this)
+	out -> (memory[this + Enemy_life] + 4) / 5
 
 def Enemy_getToLane(this)
 	out -> memory[memory[this + Enemy__path] + Path_toLane]

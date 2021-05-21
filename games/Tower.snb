@@ -71,11 +71,11 @@ def Tower_addLevel(this, difference)
 		memory[this + Tower_level] -> newLevel
 		out -> true
 
-def Tower_hit(this)
+def Tower_hit(this, _enemy)
 	# shooting speed decreased but no need to adjust time
 	playTowerHitSound()
-	Tower_animateHit(this) # TODO: move to main and animate all hit tower at once
-	memory[this + Tower_level] -> max(memory[this + Tower_level] - 1, 0)
+	Tower_animateHit(this)
+	memory[this + Tower_level] -> max(memory[this + Tower_level] - Enemy_getLevel(_enemy), 0)
 	if memory[this + Tower_level] = 0
 		onTowerDestroyed(memory[this + Tower_index])
 
