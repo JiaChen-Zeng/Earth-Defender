@@ -76,9 +76,9 @@ def sqrt(number)
 	out -> x
 
 # Microsoft Visual Basic (6 and earlier)
-memory[_randomMultipier] -> 228134297 * 5
-const RANDOM_INCREMENT -> 12820163
-const RANDOM_MODULUS -> 16777216
+memory[_randomSeed] -> 1
+const RANDOM_MULTIPLIER -> 771645345
+const RANDOM_MODULUS -> 1073741789
 def random(number)
-	memory[_randomSeed] -> mod(memory[_randomMultipier] * memory[_randomSeed] + RANDOM_INCREMENT, RANDOM_MODULUS)
+	memory[_randomSeed] -> mod(RANDOM_MULTIPLIER * memory[_randomSeed], RANDOM_MODULUS)
 	out -> mod(memory[_randomSeed], number)

@@ -23,63 +23,80 @@ def clear()
 def offset(x, y)
 	out -> (y * SCREEN_WIDTH) + x
 
-def drawPixel(x, y, color)
-	assertEx(and(-1 < x, x < SCREEN_WIDTH), ERROR_POINT_OUT_OF_SCREEN)
-	assertEx(and(-1 < y, y < SCREEN_HEIGHT), ERROR_POINT_OUT_OF_SCREEN)
+def drawPixelRaw(x, y, color)
 	memory[SCREEN + offset(x, y)] -> color
 
+def drawPixel(x, y, color)
+	assertPointInScreen(x, y)
+	drawPixelRaw(x, y, color)
+
 def drawRect(x, y, width, height, color)
+	assertEx(and(0 < width, 0 < height), ERROR_ILLEGAL_ARGUMENT)
+	assertRectInScreen(x, y, x + width - 1, y + height - 1)
 	offsetY -> 0
 	while offsetY < height
 		offsetX -> 0
 		while offsetX < width
-			drawPixel(x + offsetX, y + offsetY, color)
+			drawPixelRaw(x + offsetX, y + offsetY, color)
 			offsetX -> offsetX + 1
 		offsetY -> offsetY + 1
 
 def drawRectOutline(x, y, width, height, color)
+	assertEx(and(0 < width, 0 < height), ERROR_ILLEGAL_ARGUMENT)
+	assertRectInScreen(x, y, x + width - 1, y + height - 1)
 	offsetX -> 0
 	while offsetX < width
-		drawPixel(x + offsetX, y, color)
-		drawPixel(x + offsetX, y + height, color)
+		drawPixelRaw(x + offsetX, y, color)
+		drawPixelRaw(x + offsetX, y + height - 1, color)
 		offsetX -> offsetX + 1
 
 	offsetY -> 0
 	while offsetY < height
-		drawPixel(x, y + offsetY, color)
-		drawPixel(x + width, y + offsetY, color)
+		drawPixelRaw(x, y + offsetY, color)
+		drawPixelRaw(x + width - 1, y + offsetY, color)
 		offsetY -> offsetY + 1
 	
-	drawPixel(x + width, y + height, color)
+	drawPixelRaw(x + width - 1, y + height - 1, color)
 
 def drawCircle(x, y, radius, color)
+	assertEx(0 < radius, ERROR_ILLEGAL_ARGUMENT)
+	assertRectInScreen(x - radius + 1, y - radius + 1, x + radius - 1, y + radius - 1)
 	offsetY -> -radius
 	while offsetY <= radius
 		offsetX -> -radius
 		while offsetX <= radius
 			if ((offsetX * offsetX) + (offsetY * offsetY)) <= (radius * radius + 1)
-				drawPixel(x + offsetX, y + offsetY, color)
+				drawPixelRaw(x + offsetX, y + offsetY, color)
 			offsetX -> offsetX + 1
 		offsetY -> offsetY + 1
 
 def drawLine(fromX, fromY, toX, toY, color)
+	assertRectInScreen(fromX, fromY, toX, toY)
 	offsetX -> 0
 	offsetY -> 0
 	if abs(toY - fromY) <= abs(toX - fromX)
 		incX -> cond(fromX < toX, 1, -1)
 		while (fromX + offsetX) != toX
-			drawPixel(fromX + offsetX, fromY + offsetY, color)
+			drawPixelRaw(fromX + offsetX, fromY + offsetY, color)
 			offsetX -> offsetX + incX
 			offsetY -> (toY - fromY) * offsetX / (toX - fromX)
 
 	if abs(toX - fromX) < abs(toY - fromY)
 		incY -> cond(fromY < toY, 1, -1)
 		while (fromY + offsetY) != toY
-			drawPixel(fromX + offsetX, fromY + offsetY, color)
+			drawPixelRaw(fromX + offsetX, fromY + offsetY, color)
 			offsetY -> offsetY + incY
 			offsetX -> (toX - fromX) * offsetY / (toY - fromY)
 
-	drawPixel(toX, toY, color)
+	drawPixelRaw(toX, toY, color)
+
+def assertRectInScreen(x1, y1, x2, y2)
+	assertPointInScreen(x1, y1)
+	assertPointInScreen(x2, y2)
+
+def assertPointInScreen(x, y)
+	assertEx(and(-1 < x, x < SCREEN_WIDTH), ERROR_POINT_OUT_OF_SCREEN)
+	assertEx(and(-1 < y, y < SCREEN_HEIGHT), ERROR_POINT_OUT_OF_SCREEN)
 
 def randomColor()
 	out -> random(999999)

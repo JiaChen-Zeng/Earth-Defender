@@ -48,7 +48,4 @@ def playUltimateSound()
 	playSound(CHANNEL_GAME_LONG, 1000, 300, VOLUME_DEFAULT / 2)
 
 def playTowerHitSound()
-	i -> 0
-	while i < 3
-		playSound(CHANNEL_GAME_LONG, 150 - (i * 20), 20, VOLUME_DEFAULT)
-		i -> i + 1
+	playSound(CHANNEL_GAME_LONG, 180, 50, VOLUME_DEFAULT * 4)

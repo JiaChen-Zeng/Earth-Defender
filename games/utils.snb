@@ -25,15 +25,15 @@ def isPointInCircle(x, y, circleX, circleY, radius)
 
 const SPACE_HINT_X -> 12
 const SPACE_HINT_Y -> SCREEN_HEIGHT / 2 + 16
-const SPACE_HINT_COLOR_DARK -> 000000
-const SPACE_HINT_COLOR_LIGHT -> 224444
+const SPACE_HINT_COLOR_NORMAL -> 777777
+const SPACE_HINT_COLOR_LIGHT -> 979764
 const SPACE_HINT_COLOR_RATE -> 10
-memory[_spaceHintColor] -> SPACE_HINT_COLOR_DARK
+memory[_spaceHintColor] -> SPACE_HINT_COLOR_NORMAL
 def writeSpaceHint()
 	penAt(SPACE_HINT_X, SPACE_HINT_Y)
 	memory[_spaceHintTime] -> remainder(memory[_spaceHintTime] + 1, SPACE_HINT_COLOR_RATE)
 	if memory[_spaceHintTime] = 0
-		memory[_spaceHintColor] -> cond(memory[_spaceHintColor] = SPACE_HINT_COLOR_DARK, SPACE_HINT_COLOR_LIGHT, SPACE_HINT_COLOR_DARK)
+		memory[_spaceHintColor] -> cond(memory[_spaceHintColor] = SPACE_HINT_COLOR_NORMAL, SPACE_HINT_COLOR_LIGHT, SPACE_HINT_COLOR_NORMAL)
 	penColor(memory[_spaceHintColor])
 	writeP()
 	writeR()

@@ -17,5 +17,4 @@ const _PEN_COLOR -> _PEN_Y + 1
 
 const _math_var -> _pen_var + 200 # reserve for 200 vars
 const _randomSeed -> _math_var # 1 var
-const _randomMultipier -> _randomSeed + 1 # 1 var
 include "math.snb"

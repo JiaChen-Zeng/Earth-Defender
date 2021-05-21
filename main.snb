@@ -30,7 +30,6 @@ const GOLD_NO_TOWER_PENALTY -> 3
 const ULTIMATE_GOLD -> 3
 const ULTIMATE_INDEX -> LANE_COUNT
 const ULTIMATE_DAMAGE_RATE -> 10
-memory[_ultimateAvailable] -> true
 
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
@@ -52,6 +51,7 @@ memory[_colors + 9] -> rgb(173, 14, 159)
 main()
 
 def main()
+	initBackground()
 	enterInitial()
 	while true
 		update()
@@ -59,6 +59,7 @@ def main()
 		flush()
 
 def update()
+	updateBackground()
 	tickToEnterState()
 
 	if memory[_state] = STATE_INITIAL
@@ -136,11 +137,9 @@ def update()
 		handleEnemiesTowersCollision()
 		handleEnemiesBulletsCollision()
 		if and(anyEnemyExists() = false, memory[_stateToEnter] = STATE_NULL)
-			if true
-			# if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
+			if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
 				memory[_stateToEnter] -> STATE_GAME_CLEAR
-			if false
-			# if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
+			if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
 				if anyTowerExists() = false
 					i -> 0
 					while i < GOLD_NO_TOWER_PENALTY
@@ -158,6 +157,11 @@ def update()
 		if keyPressed(KEY_SPACE)
 			enterInitial()
 			enterReady()
+
+def updateBackground()
+	memory[_skyTime] -> remainder(memory[_skyTime] + 1, BACKGROUND_SKY_SPEED)
+	if memory[_skyTime] = 0
+		memory[_skyX] -> remainder(memory[_skyX] + 1, SCREEN_WIDTH)
 
 def tickToEnterState()
 	if memory[_stateToEnter]
@@ -249,6 +253,7 @@ def handleEnemiesBulletCollision(_bullet)
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
 	memory[_gold] -> GOLD_INITIAL
+	memory[_ultimateAvailable] -> true
 	memory[_enemyLifeTotal] -> ENEMY_LIFE_TOTAL_INITIAL
 	initTowers()
 
@@ -269,9 +274,10 @@ def enterGameOver()
 def enterGameClear()
 	memory[_state] -> STATE_GAME_CLEAR
 	# TODO: playGameClearSound()
+	# TODO: Better font
 
 def draw()
-	clear()
+	drawBackground()
 	drawTowers()
 	drawUltimateIcon()
 	if memory[_state] = STATE_INITIAL
@@ -298,14 +304,44 @@ def draw()
 
 	drawUI()
 
+def drawDots(x, y, _dots, count, color)
+	i -> 0
+	while i < count
+		drawPixel(remainder(x + memory[_dots + (i * 2)], SCREEN_WIDTH), y + memory[_dots + (i * 2) + 1], color)
+		i -> i + 1
+
+const BACKGROUND_SKY_COLOR -> 062850 # rgb(18, 74, 130)
+const BACKGROUND_SKY_STAR_COUNT -> 20
+const BACKGROUND_SKY_STAR_COLOR -> 939395
+const BACKGROUND_SKY_SPEED -> 60
+const BACKGROUND_GROUND_Y -> 20
+const BACKGROUND_GROUND_COLOR -> 203126 # rgb(54, 82, 67)
+const BACKGROUND_GROUND_SAND_COUNT -> 15
+const BACKGROUND_GROUND_SAND_DARK_COLOR -> 132017 # rgb(36, 54, 44)
+const BACKGROUND_GROUND_SAND_LIGHT_COLOR -> 274435 # rgb(71, 115, 91)
+const BACKGROUND_GROUND_BLOCK_LENGTH -> 20
+def drawBackground()
+	drawRect(0, 0, SCREEN_WIDTH, BACKGROUND_GROUND_Y, BACKGROUND_SKY_COLOR)
+	drawDots(memory[_skyX], 0, _backgroundStars, BACKGROUND_SKY_STAR_COUNT, BACKGROUND_SKY_STAR_COLOR)
+
+	drawRect(0, BACKGROUND_GROUND_Y, SCREEN_WIDTH, SCREEN_HEIGHT - BACKGROUND_GROUND_Y, BACKGROUND_GROUND_COLOR)
+	y -> BACKGROUND_GROUND_Y
+	while y < SCREEN_HEIGHT
+		x -> 0
+		while x < SCREEN_WIDTH
+			drawDots(x, y, _backgroundSandDark, 15, BACKGROUND_GROUND_SAND_DARK_COLOR)
+			drawDots(x, y, _backgroundSandLight, 15, BACKGROUND_GROUND_SAND_LIGHT_COLOR)
+			x -> x + BACKGROUND_GROUND_BLOCK_LENGTH
+		y -> y + BACKGROUND_GROUND_BLOCK_LENGTH
+
 def drawUI()
 	drawGoldBar()
 
 const GOLD_BAR_X -> SCREEN_WIDTH - 8
 const GOLD_BAR_Y -> 30
-const GOLD_BAR_WIDTH -> 7
-const GOLD_BAR_HEIGHT -> 37
-const GOLD_BAR_COLOR -> 938824 # rgb(217, 206, 56)
+const GOLD_BAR_WIDTH -> 8
+const GOLD_BAR_HEIGHT -> 38
+const GOLD_BAR_COLOR -> 706725 # rgb(181, 173, 65)
 def drawGoldBar()
 	drawRectOutline(GOLD_BAR_X, GOLD_BAR_Y, GOLD_BAR_WIDTH, GOLD_BAR_HEIGHT, GOLD_BAR_COLOR)
 	i -> 0
@@ -314,10 +350,10 @@ def drawGoldBar()
 		i -> i + 1
 
 const GOLD_INDICATOR_COUNT -> 5
-const GOLD_INDICATOR_WIDTH -> GOLD_BAR_WIDTH - 1
+const GOLD_INDICATOR_WIDTH -> GOLD_BAR_WIDTH - 2
 const GOLD_INDICATOR_HEIGHT -> 6
 const GOLD_INDICATOR_X -> GOLD_BAR_X + 1
-const GOLD_INDICATOR_Y -> GOLD_BAR_Y + GOLD_BAR_HEIGHT - GOLD_INDICATOR_HEIGHT - 1
+const GOLD_INDICATOR_Y -> GOLD_BAR_Y + GOLD_BAR_HEIGHT - GOLD_INDICATOR_HEIGHT - 2
 const GOLD_INDICATOR_SPACE -> 1
 def drawGoldIndicator(index) # index increase from bottom to top
 	level -> (memory[_gold] / GOLD_INDICATOR_COUNT) - 1 + (mod(memory[_gold], GOLD_INDICATOR_COUNT) > index)
@@ -350,7 +386,7 @@ def drawTowers()
 const TOWER_SELECTOR_X_ULTIMATE -> SCREEN_WIDTH - 5
 const TOWER_SELECTOR_Y -> SCREEN_HEIGHT - 20
 const TOWER_SELECTOR_RADIUS -> 3
-const TOWER_SELECTOR_COLOR -> 222222
+const TOWER_SELECTOR_COLOR -> 959595
 def drawTowerSelector()
 	x -> TOWER_SELECTOR_X_ULTIMATE
 	if memory[_selectedTowerIndex] != ULTIMATE_INDEX
@@ -394,6 +430,20 @@ def drawUltimate(y)
 
 def yAcrossGoldIndicator(y)
 	out -> and(GOLD_BAR_Y <= y, y <= (GOLD_BAR_Y + GOLD_BAR_HEIGHT))
+
+def initBackground()
+	i -> 0
+	while i < BACKGROUND_SKY_STAR_COUNT
+		memory[_backgroundStars + (i * 2)] -> random(SCREEN_WIDTH)
+		memory[_backgroundStars + (i * 2) + 1] -> random(BACKGROUND_GROUND_Y)
+		i -> i + 1
+	i -> 0
+	while i < BACKGROUND_GROUND_SAND_COUNT
+		memory[_backgroundSandDark + (i * 2)] -> random(BACKGROUND_GROUND_BLOCK_LENGTH)
+		memory[_backgroundSandDark + (i * 2) + 1] -> random(BACKGROUND_GROUND_BLOCK_LENGTH)
+		memory[_backgroundSandLight + (i * 2)] -> random(BACKGROUND_GROUND_BLOCK_LENGTH)
+		memory[_backgroundSandLight + (i * 2) + 1] -> random(BACKGROUND_GROUND_BLOCK_LENGTH)
+		i -> i + 1
 
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
