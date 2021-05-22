@@ -23,7 +23,9 @@ def drawDots(x, y, _dots, count, color)
 		drawPixel(remainder(x + memory[_dots + (i * 2)], SCREEN_WIDTH), y + memory[_dots + (i * 2) + 1], color)
 		i -> i + 1
 
-const BACKGROUND_SKY_COLOR -> 062850 # rgb(18, 74, 130)
+const BACKGROUND_SKY_NORMAL_COLOR -> 062850 # rgb(18, 74, 130)
+const BACKGROUND_SKY_BATTLE_COLOR -> 250650 # rgb(65, 18, 130)
+const BACKGROUND_SKY_GAME_CLEAR_COLOR -> 718995 # rgb(183, 231, 247)
 const BACKGROUND_SKY_STAR_COUNT -> 20
 const BACKGROUND_SKY_STAR_COLOR -> 939395
 const BACKGROUND_SKY_SPEED -> 60
@@ -34,8 +36,9 @@ const BACKGROUND_GROUND_SAND_DARK_COLOR -> 132017 # rgb(36, 54, 44)
 const BACKGROUND_GROUND_SAND_LIGHT_COLOR -> 274435 # rgb(71, 115, 91)
 const BACKGROUND_GROUND_BLOCK_LENGTH -> 20
 def drawBackground()
-	drawRect(0, 0, SCREEN_WIDTH, BACKGROUND_GROUND_Y, BACKGROUND_SKY_COLOR)
-	drawDots(memory[_skyX], 0, _backgroundStars, BACKGROUND_SKY_STAR_COUNT, BACKGROUND_SKY_STAR_COLOR)
+	drawRect(0, 0, SCREEN_WIDTH, BACKGROUND_GROUND_Y, getSkyColor())
+	if and(memory[_state] != STATE_GAME_CLEAR, and(memory[_stateToEnter] = STATE_GAME_CLEAR, (TIME_TO_ENTER_STATE / 2) < memory[TIME_TO_ENTER_STATE]) = false)
+		drawDots(memory[_skyX], 0, _backgroundStars, BACKGROUND_SKY_STAR_COUNT, BACKGROUND_SKY_STAR_COLOR)
 
 	drawRect(0, BACKGROUND_GROUND_Y, SCREEN_WIDTH, SCREEN_HEIGHT - BACKGROUND_GROUND_Y, BACKGROUND_GROUND_COLOR)
 	y -> BACKGROUND_GROUND_Y
@@ -47,8 +50,20 @@ def drawBackground()
 			x -> x + BACKGROUND_GROUND_BLOCK_LENGTH
 		y -> y + BACKGROUND_GROUND_BLOCK_LENGTH
 
-def drawUI()
-	drawGoldBar()
+def getSkyColor()
+	out -> 0
+	if memory[_stateToEnter] = STATE_NULL
+		out -> BACKGROUND_SKY_NORMAL_COLOR
+		if memory[_state] = STATE_BATTLE
+			out -> BACKGROUND_SKY_BATTLE_COLOR
+		if memory[_state] = STATE_GAME_CLEAR
+			out -> BACKGROUND_SKY_GAME_CLEAR_COLOR
+	if memory[_stateToEnter] = STATE_READY
+		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
+	if memory[_stateToEnter] = STATE_BATTLE
+		out -> getTransitionedColor(BACKGROUND_SKY_NORMAL_COLOR, BACKGROUND_SKY_BATTLE_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
+	if memory[_stateToEnter] = STATE_GAME_CLEAR
+		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_GAME_CLEAR_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 
 const GOLD_BAR_X -> SCREEN_WIDTH - 8
 const GOLD_BAR_Y -> 30

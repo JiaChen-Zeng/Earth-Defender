@@ -1,3 +1,4 @@
+include "color.snb"
 include "Float.snb"
 include "Array.snb"
 
@@ -60,11 +61,6 @@ def setMemory(_start, length, value)
 	while i < length
 		memory[_start + i] -> value
 		i -> i + 1
-
-# For constants, use Javascript
-# rgb = (red, green, blue) => (Math.floor(red * 99 / 255) * 10000) + (Math.floor(green * 99 / 255) * 100) + Math.floor((blue * 99 / 255))
-def rgb(red, green, blue)
-	out -> (red * 99 / 255 * 10000) + (green * 99 / 255 * 100) + (blue * 99 / 255)
 
 def keyPressed(key)
 	out -> and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key])

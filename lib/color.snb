@@ -1,0 +1,28 @@
+# For constants, use Javascript
+# rgb = (red, green, blue) => (Math.floor(red * 99 / 255) * 10000) + (Math.floor(green * 99 / 255) * 100) + Math.floor((blue * 99 / 255))
+def rgb(red, green, blue)
+	out -> (red * 99 / 255 * 10000) + (green * 99 / 255 * 100) + (blue * 99 / 255)
+
+def getRed(color)
+	out -> color / 10000
+
+def getGreen(color)
+	out -> remainder(color / 100, 100)
+
+def getBlue(color)
+	out -> remainder(color, 100)
+
+def getColor(red, green, blue)
+	out -> (red * 10000) + (green * 100) + blue
+
+def getTransitionedColor(startColor, endColor, now, time)
+	red -> (getRed(startColor) * (time - now) / time) + (getRed(endColor) * now / time)
+	green -> (getGreen(startColor) * (time - now) / time) + (getGreen(endColor) * now / time)
+	blue -> (getBlue(startColor) * (time - now) / time) + (getBlue(endColor) * now / time)
+	out -> getColor(red, green, blue)
+
+def getLightenedColor(color, threshold)
+	out -> getTransitionedColor(color, 999999, threshold, 100)
+
+def getDarkenedColor(color, threshold)
+	out -> getTransitionedColor(color, 000000, threshold, 100)

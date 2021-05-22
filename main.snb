@@ -22,7 +22,7 @@ const STATE_BATTLE -> 3
 const STATE_GAME_OVER -> 4
 const STATE_GAME_CLEAR -> 5
 
-const TIME_TO_ENTER_STATE -> 60
+const TIME_TO_ENTER_STATE -> 20
 
 const GOLD_INITIAL -> 5
 const GOLD_MAX -> 50
@@ -34,7 +34,7 @@ const ULTIMATE_DAMAGE_RATE -> 17
 
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
-const ENEMY_LIFE_TOTAL_MAX -> 50 * 7
+const ENEMY_LIFE_TOTAL_MAX -> 50 * LANE_COUNT
 
 # light -> dark
 # blue -> green -> orange -> red -> purple
@@ -78,7 +78,7 @@ def update()
 		if keyPressed(KEY_SPACE)
 			exists -> anyTowerExists()
 			if exists
-				enterBattle()
+				memory[_stateToEnter] -> STATE_BATTLE
 			if exists = false
 				playInvalidActionSound()
 
@@ -304,6 +304,9 @@ def draw()
 		writeSpaceHint()
 
 	drawUI()
+
+def drawUI()
+	drawGoldBar()
 
 def drawTowers()
 	i -> 0
