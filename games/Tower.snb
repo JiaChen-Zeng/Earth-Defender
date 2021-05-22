@@ -9,7 +9,7 @@ const TOWER_HEIGHT -> 10
 const TOWER_Y -> SCREEN_HEIGHT - TOWER_HEIGHT
 const TOWER_LEVEL_MAX -> 10 # level 0 for empty tower
 const TOWER_COLOR_EMPTY -> 777777
-const TOWER_COLOR_HIT -> 917777
+const TOWER_COLOR_HIT_LIGHTEN_THRESHOLD -> 50
 memory[_towerSpeed] -> 45
 memory[_towerSpeed + 1] -> 30
 memory[_towerSpeed + 2] -> 21
@@ -34,13 +34,12 @@ def Tower_update(this)
 
 def Tower_draw(this)
 	if memory[this + Tower_animating] = false
-		color -> memory[_colors + memory[this + Tower_level] - 1]
+		color -> Tower_getColor(this)
 		if memory[this + Tower_level] = 0
 			color -> TOWER_COLOR_EMPTY
 
 		Tower_drawInternal(this, color, 0)
 
-# empty, normal, hit
 def Tower_drawInternal(this, color, offsetX)
 	x -> getLaneX(memory[this + Tower_index]) + offsetX
 	if memory[this + Tower_level] = 0
@@ -52,16 +51,17 @@ def Tower_drawInternal(this, color, offsetX)
 		drawRect(x + (TOWER_WIDTH / 2) - 1, TOWER_Y - 3, 2, 3, color)
 
 def Tower_animateHit(this)
+	hitColor -> getLightenedColor(Tower_getColor(this), TOWER_COLOR_HIT_LIGHTEN_THRESHOLD)
 	memory[this + Tower_animating] -> true
 	draw()
-	Tower_drawInternal(this, TOWER_COLOR_HIT, 0)
-	sleep(5)
+	Tower_drawInternal(this, hitColor, 0)
+	sleep(3)
 	draw()
-	Tower_drawInternal(this, TOWER_COLOR_HIT, -1)
-	sleep(5)
+	Tower_drawInternal(this, hitColor, -1)
+	sleep(3)
 	draw()
-	Tower_drawInternal(this, TOWER_COLOR_HIT, 1)
-	sleep(5)
+	Tower_drawInternal(this, hitColor, 1)
+	sleep(3)
 	memory[this + Tower_animating] -> false
 
 def Tower_addLevel(this, difference)
@@ -78,6 +78,9 @@ def Tower_hit(this, _enemy)
 	memory[this + Tower_level] -> max(memory[this + Tower_level] - Enemy_getLevel(_enemy), 0)
 	if memory[this + Tower_level] = 0
 		onTowerDestroyed(memory[this + Tower_index])
+
+def Tower_getColor(this)
+	out -> memory[_colors + memory[this + Tower_level] - 1]
 
 def Tower_getShootingSpeed(this)
 	out -> memory[_towerSpeed + memory[this + Tower_level] - 1]

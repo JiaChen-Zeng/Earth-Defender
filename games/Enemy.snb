@@ -11,8 +11,7 @@ const ENEMY_RADIUS -> 5
 const ENEMY_SPEED_BASE -> 4 # frames per movement of 1 pixel
 const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
-const ENEMY_COLOR -> 440000
-const ENEMY_COLOR_HIT -> 444444
+const ENEMY_COLOR_LIGHTEN_THRESHOLD -> 30
 const ENEMY_COLOR_EYE -> 000000
 
 def Enemy(this, life, _path)
@@ -30,7 +29,7 @@ def Enemy_update(this)
 		Enemy_move(this)
 
 def Enemy_draw(this)
-	Enemy_drawInternal(this, memory[_colors + Enemy_getLevel(this) - 1])
+	Enemy_drawInternal(this, Enemy_getColor(this))
 
 def Enemy_drawInternal(this, color)
 	x -> Float_roundToInt(this + Enemy_x)
@@ -42,7 +41,7 @@ def Enemy_drawInternal(this, color)
 	drawPixel(x + 1, y + 2, ENEMY_COLOR_EYE)
 
 def Enemy_animateHit(this)
-	Enemy_drawInternal(this, ENEMY_COLOR_HIT)
+	Enemy_drawInternal(this, getLightenedColor(Enemy_getColor(this), ENEMY_COLOR_LIGHTEN_THRESHOLD))
 	flush()
 
 def Enemy_move(this)
@@ -76,6 +75,9 @@ def Enemy_hit(this, damage)
 
 def Enemy_getLevel(this)
 	out -> (memory[this + Enemy_life] + 4) / 5
+
+def Enemy_getColor(this)
+	out -> memory[_colors + Enemy_getLevel(this) - 1]
 
 def Enemy_getToLane(this)
 	out -> memory[memory[this + Enemy__path] + Path_toLane]
