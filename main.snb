@@ -24,13 +24,13 @@ const STATE_GAME_CLEAR -> 5
 
 const TIME_TO_ENTER_STATE -> 20
 
-const GOLD_INITIAL -> 5
+const GOLD_INITIAL -> 2
 const GOLD_MAX -> 50
 const GOLD_NO_TOWER_PENALTY -> 3
 
 const ULTIMATE_GOLD -> 3
 const ULTIMATE_INDEX -> LANE_COUNT
-const ULTIMATE_DAMAGE_RATE -> 17
+const ULTIMATE_DAMAGE_RATE -> 30
 
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
@@ -70,6 +70,7 @@ def update()
 			playGameStartSound()
 
 	if memory[_state] = STATE_READY
+		random(1) # for random seed
 		if keyPressed(KEY_LEFT)
 			memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
 		if keyPressed(KEY_RIGHT)
@@ -293,8 +294,6 @@ def draw()
 		drawBullets()
 
 	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
-		drawPaths()
-		drawEnemies()
 		drawBullets()
 		if memory[_state] = STATE_GAME_OVER
 			writeGameOver()

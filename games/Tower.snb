@@ -10,16 +10,16 @@ const TOWER_Y -> SCREEN_HEIGHT - TOWER_HEIGHT
 const TOWER_LEVEL_MAX -> 10 # level 0 for empty tower
 const TOWER_COLOR_EMPTY -> 777777
 const TOWER_COLOR_HIT_LIGHTEN_THRESHOLD -> 50
-memory[_towerSpeed] -> 45
-memory[_towerSpeed + 1] -> 30
-memory[_towerSpeed + 2] -> 21
-memory[_towerSpeed + 3] -> 17
-memory[_towerSpeed + 4] -> 14
-memory[_towerSpeed + 5] -> 11
-memory[_towerSpeed + 6] -> 10
-memory[_towerSpeed + 7] -> 9
-memory[_towerSpeed + 8] -> 8
-memory[_towerSpeed + 9] -> 7
+memory[_towerSpeed] -> 4181
+memory[_towerSpeed + 1] -> 2790
+memory[_towerSpeed + 2] -> 2247
+memory[_towerSpeed + 3] -> 1939
+memory[_towerSpeed + 4] -> 1735
+memory[_towerSpeed + 5] -> 1587
+memory[_towerSpeed + 6] -> 1474
+memory[_towerSpeed + 7] -> 1383
+memory[_towerSpeed + 8] -> 1308
+memory[_towerSpeed + 9] -> 1245
 
 def Tower(this, index, level)
 	memory[this + Tower_index] -> index
@@ -28,8 +28,10 @@ def Tower(this, index, level)
 	memory[this + Tower_animating] -> false
 
 def Tower_update(this)
-	memory[this + Tower_time] -> mod(memory[this + Tower_time] + 1, Tower_getShootingSpeed(this))
-	if memory[this + Tower_time] = 0
+	memory[this + Tower_time] -> memory[this + Tower_time] + 100
+	speed -> Tower_getShootingSpeed(this)
+	if speed <= memory[this + Tower_time]
+		memory[this + Tower_time] -> memory[this + Tower_time] - speed
 		onTowerShoot(memory[this + Tower_index])
 
 def Tower_draw(this)
