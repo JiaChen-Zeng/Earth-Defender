@@ -3,10 +3,7 @@ include "games/sound.snb"
 
 #===================playground======================
 
-assert(1073741823 + 1)
-assert(1073741789)
-playTowerHitSound()
-sleep(120)
+
 
 #================interpreter comparison bug================
 
