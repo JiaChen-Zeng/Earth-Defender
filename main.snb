@@ -231,8 +231,6 @@ def handleEnemiesTowersCollision()
 		if 0 < memory[_enemy + Enemy_life]
 			if Enemy_collidedWithTower(_enemy)
 				onEnemyCollidedWithTower(_enemy)
-			if Enemy_arrived(_enemy)
-				enemyExplode(_enemy)
 		i -> i + 1
 
 def handleEnemiesBulletsCollision()
@@ -419,18 +417,6 @@ def bulletExplode(_bullet)
 		i -> i + 1
 	Bullet_remove(_bullet)
 
-def enemyExplode(_enemy)
-	lane -> Enemy_getToLane(_enemy) - 1
-	i -> 0
-	while i < 3
-		if and(0 <= lane, lane < LANE_COUNT)
-			_tower -> Array_at(_towers, lane)
-			if 0 < memory[_tower + Tower_level]
-				Tower_hit(_tower, _enemy)
-		lane -> lane + 1
-		i -> i + 1
-	memory[_enemy + Enemy_life] -> 0
-
 def anyTowerExists()
 	towerExists -> false
 	i -> 0
@@ -463,3 +449,15 @@ def onEnemyCollidedWithTower(_enemy)
 	if towerExists
 		Tower_hit(_tower, _enemy)
 		memory[_enemy + Enemy_life] -> 0
+
+def onEnemyExplode(_enemy)
+	lane -> Enemy_getToLane(_enemy) - 1
+	i -> 0
+	while i < 3
+		if and(0 <= lane, lane < LANE_COUNT)
+			_tower -> Array_at(_towers, lane)
+			if 0 < memory[_tower + Tower_level]
+				Tower_hit(_tower, _enemy)
+		lane -> lane + 1
+		i -> i + 1
+	memory[_enemy + Enemy_life] -> 0

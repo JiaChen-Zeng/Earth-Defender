@@ -1,4 +1,4 @@
-const Enemy_size -> 9
+const Enemy_size -> 10
 const Enemy_life -> 0
 const Enemy__path -> 1
 const Enemy_x -> 2 # float
@@ -6,13 +6,16 @@ const Enemy_y -> 4 # float
 const Enemy_speedBase -> 6
 const Enemy_speedBuff -> 7
 const Enemy_time -> 8
+const Enemy_timeToExplode -> 9
 
 const ENEMY_RADIUS -> 5
 const ENEMY_SPEED_BASE -> 4 # frames per movement of 1 pixel
 const ENEMY_SPEED_BUFF_RATE -> 5
 const ENEMY_SPEED_MIN -> 60
 const ENEMY_COLOR_LIGHTEN_THRESHOLD -> 30
+const ENEMY_COLOR_EXPLOSION -> 999999
 const ENEMY_COLOR_EYE -> 000000
+const ENEMY_TIME_TO_EXPLODE -> 60
 
 def Enemy(this, life, _path)
 	memory[this + Enemy_life] -> life
@@ -22,16 +25,22 @@ def Enemy(this, life, _path)
 	memory[this + Enemy_speedBase] -> ENEMY_SPEED_BASE
 	memory[this + Enemy_speedBuff] -> 0
 	memory[this + Enemy_time] -> 0
+	memory[this + Enemy_timeToExplode] -> 0
 
 def Enemy_update(this)
 	memory[this + Enemy_time] -> mod(memory[this + Enemy_time] + 1, Enemy_getSpeed(this))
 	if memory[this + Enemy_time] = 0
 		Enemy_move(this)
+	if Enemy_arrived(this)
+		memory[this + Enemy_timeToExplode] -> memory[this + Enemy_timeToExplode] + 1
+		if memory[this + Enemy_timeToExplode] = ENEMY_TIME_TO_EXPLODE
+			onEnemyExplode(this)
 
 def Enemy_draw(this)
 	Enemy_drawInternal(this, Enemy_getColor(this))
 
 def Enemy_drawInternal(this, color)
+	color -> getTransitionedColor(color, ENEMY_COLOR_EXPLOSION, memory[this + Enemy_timeToExplode], ENEMY_TIME_TO_EXPLODE)
 	x -> Float_roundToInt(this + Enemy_x)
 	y -> Float_roundToInt(this + Enemy_y)
 	drawPixel(x, y - ENEMY_RADIUS - 2, color)
@@ -62,9 +71,8 @@ def Enemy_move(this)
 		if Path_inPath(_path, Float_roundToInt(this + Enemy_x), Float_roundToInt(this + Enemy_y)) = false
 			Float_fromInt(this + Enemy_x, memory[_path + Path_toX], POINT_PRECISION)
 			Float_fromInt(this + Enemy_y, memory[_path + Path_toY] + 1, POINT_PRECISION)
-	if InPath = false
-		if (Float_roundToInt(this + Enemy_y) + 1) < SCREEN_HEIGHT
-			Float_addInt(this + Enemy_y, 1)
+	if and(InPath = false, Enemy_arrived(this) = false)
+		Float_addInt(this + Enemy_y, 1)
 
 def Enemy_hit(this, damage)
 	memory[this + Enemy_life] -> memory[this + Enemy_life] - damage
