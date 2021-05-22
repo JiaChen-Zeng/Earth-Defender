@@ -62,8 +62,20 @@ def setMemory(_start, length, value)
 		memory[_start + i] -> value
 		i -> i + 1
 
+const KEY_DOWN_TIME_AS_PRESS -> 20
+const KEY_DOWN_INTERVAL_AS_PRESS -> 10
 def keyPressed(key)
-	out -> and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key])
+	# Count long key down as key press
+	if and(memory[_keyPressedInternal + key - _key_begin], memory[key])
+		memory[_keyDownTime] -> memory[_keyDownTime] + 1
+		# Reset timer partially by long key down interval
+		if (KEY_DOWN_TIME_AS_PRESS + KEY_DOWN_INTERVAL_AS_PRESS) <= memory[_keyDownTime]
+			memory[_keyDownTime] -> KEY_DOWN_TIME_AS_PRESS
+	# Other key press, or this key up, reset key down timer
+	if or(and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key]), and(memory[_keyPressedInternal + key - _key_begin], memory[key] = false))
+		memory[_keyDownTime] -> 0
+	# First key down, or at long key down interval, is key press
+	out -> or(and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key]), and(memory[_keyPressedInternal + key - _key_begin], KEY_DOWN_TIME_AS_PRESS = memory[_keyDownTime]))
 	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
 
 def playSound(channel, frequency, attenuation, volume)
@@ -81,9 +93,11 @@ def assertEx(condition, error)
 
 def debug(condition)
 	drawPixel(0, 0, cond(condition, GREEN, RED))
+	flush()
 
 def debug2(condition)
 	drawPixel(SCREEN_WIDTH - 1, 0, cond(condition, GREEN, RED))
+	flush()
 
 def throwError(error)
 	memory[error] -> 0

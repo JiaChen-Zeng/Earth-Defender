@@ -4,18 +4,19 @@ const _lang_var -> _lib_var # reserve for 1200 vars
 const _tempFloat -> _lang_var # 2 vars
 const _tempArray -> _tempFloat + 2 # 1000 vars
 const _keyPressedInternal -> _tempArray + 1000 # 10 vars
+const _keyDownTime -> _keyPressedInternal + 10 # 1 var
 include "lang.snb"
 
 const _graphics_var -> _lang_var + 1200 # reserve for 200 vars
 include "graphics.snb"
 
 const _pen_var -> _graphics_var + 200
-include "pen.snb"
 const _pen_x -> _pen_var
 const _pen_y -> _pen_x + 1
 const _pen_color -> _pen_y + 1
 const _pen_outline_color -> _pen_color + 1
 const _pen_font -> _pen_outline_color + 1
+include "pen.snb"
 
 const _math_var -> _pen_var + 200 # reserve for 200 vars
 const _randomSeed -> _math_var # 1 var
