@@ -59,9 +59,14 @@ def getSkyColor()
 		if memory[_state] = STATE_GAME_CLEAR
 			out -> BACKGROUND_SKY_GAME_CLEAR_COLOR
 	if memory[_stateToEnter] = STATE_READY
-		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
+		if memory[_state] = STATE_BATTLE
+			out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
+		if memory[_state] = STATE_GAME_CLEAR
+			out -> getTransitionedColor(BACKGROUND_SKY_GAME_CLEAR_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 	if memory[_stateToEnter] = STATE_BATTLE
 		out -> getTransitionedColor(BACKGROUND_SKY_NORMAL_COLOR, BACKGROUND_SKY_BATTLE_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
+	if memory[_stateToEnter] = STATE_GAME_OVER
+		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 	if memory[_stateToEnter] = STATE_GAME_CLEAR
 		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_GAME_CLEAR_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 
