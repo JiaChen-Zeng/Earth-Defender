@@ -1,205 +1,205 @@
 def penAt(x, y)
-	memory[_PEN_X] -> x
-	memory[_PEN_Y] -> y
+	memory[_pen_x] -> x
+	memory[_pen_y] -> y
 
 def penColor(color)
-	memory[_PEN_COLOR] -> color
+	memory[_pen_color] -> color
 
 def penOutlineColor(color)
-	memory[_PEN_OUTLINE_COLOR] -> color
+	memory[_pen_outline_color] -> color
 
 const PEN_FONT_SMALL -> 0
 const PEN_FONT_BIG -> 1
 def penFont(font)
-	memory[_PEN_FONT] -> font
+	memory[_pen_font] -> font
 
 def writeA()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 2, y, x + 2, y + 4, color)
 		drawPixel(x + 1, y, color)
 		drawPixel(x + 1, y + 2, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 7, 2, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 7, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(4, 1, 5, 5, memory[_PEN_COLOR])
-		writeDot(3, 1, memory[_PEN_COLOR])
-		writeDot(3, 3, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 6, memory[_pen_outline_color])
+		writeStroke(0, 7, 2, 7, memory[_pen_outline_color])
+		writeStroke(4, 7, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 1, memory[_pen_color])
+		writeDot(3, 3, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeC()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 1, y, x + 2, y, color)
 		drawLine(x + 1, y + 4, x + 2, y + 4, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 2, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 3, 5, 3, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 4, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 5, 1, memory[_PEN_COLOR])
-		writeStroke(1, 2, 2, 4, memory[_PEN_COLOR])
-		writeStroke(1, 5, 5, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 2, memory[_pen_outline_color])
+		writeStroke(0, 3, 5, 3, memory[_pen_outline_color])
+		writeStroke(0, 4, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 1, memory[_pen_color])
+		writeStroke(1, 2, 2, 4, memory[_pen_color])
+		writeStroke(1, 5, 5, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeD()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 5, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(6, 1, 6, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 4, 5, memory[_PEN_COLOR])
-		writeStroke(5, 2, 5, 4, memory[_PEN_COLOR])
-		writeStroke(3, 2, 3, 4, memory[_PEN_OUTLINE_COLOR])
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 5, 7, memory[_pen_outline_color])
+		writeStroke(6, 1, 6, 6, memory[_pen_outline_color])
+		writeStroke(1, 1, 4, 5, memory[_pen_color])
+		writeStroke(5, 2, 5, 4, memory[_pen_color])
+		writeStroke(3, 2, 3, 4, memory[_pen_outline_color])
 		writeSpaceInternal(8)
 
 def writeE()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 1, y, x + 2, y, color)
 		drawLine(x + 1, y + 4, x + 2, y + 4, color)
 		drawPixel(x + 1, y + 2, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 2, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 3, 5, 3, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 4, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(3, 1, 5, 1, memory[_PEN_COLOR])
-		writeStroke(3, 3, 4, 3, memory[_PEN_COLOR])
-		writeStroke(3, 5, 5, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 2, memory[_pen_outline_color])
+		writeStroke(0, 3, 5, 3, memory[_pen_outline_color])
+		writeStroke(0, 4, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(3, 1, 5, 1, memory[_pen_color])
+		writeStroke(3, 3, 4, 3, memory[_pen_color])
+		writeStroke(3, 5, 5, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeF()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 3, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 4, 5, 5, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 6, 3, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(3, 1, 5, 1, memory[_PEN_COLOR])
-		writeStroke(3, 3, 4, 3, memory[_PEN_COLOR])
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 3, memory[_pen_outline_color])
+		writeStroke(0, 4, 5, 5, memory[_pen_outline_color])
+		writeStroke(0, 6, 3, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(3, 1, 5, 1, memory[_pen_color])
+		writeStroke(3, 3, 4, 3, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeG()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 3, y + 2, x + 3, y + 4, color)
 		drawLine(x + 1, y, x + 3, y, color)
 		drawLine(x + 1, y + 4, x + 2, y + 4, color)
 		drawPixel(x + 2, y + 2, color)
 		writeSpaceInternal(5)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(3, 1, 5, 1, memory[_PEN_COLOR])
-		writeStroke(4, 4, 5, 4, memory[_PEN_COLOR])
-		writeStroke(3, 5, 5, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(3, 1, 5, 1, memory[_pen_color])
+		writeStroke(4, 4, 5, 4, memory[_pen_color])
+		writeStroke(3, 5, 5, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeH()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 7, 2, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 7, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(4, 1, 5, 5, memory[_PEN_COLOR])
-		writeDot(3, 3, memory[_PEN_COLOR])
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 6, memory[_pen_outline_color])
+		writeStroke(0, 7, 2, 7, memory[_pen_outline_color])
+		writeStroke(4, 7, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 3, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeL()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 1, y + 4, x + 2, y + 4, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 3, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 4, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(3, 5, 5, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 3, 7, memory[_pen_outline_color])
+		writeStroke(4, 4, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(3, 5, 5, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeM()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 4, y, x + 4, y + 4, color)
 		drawPixel(x + 1, y + 1, color)
 		drawPixel(x + 2, y + 2, color)
 		drawPixel(x + 3, y + 1, color)
 		writeSpaceInternal(6)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 3, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(5, 0, 8, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 1, 4, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(6, 1, 7, 5, memory[_PEN_COLOR])
-		writeStroke(3, 2, 3, 3, memory[_PEN_COLOR])
-		writeStroke(5, 2, 5, 3, memory[_PEN_COLOR])
-		writeStroke(4, 3, 4, 4, memory[_PEN_COLOR])
-		writeDot(3, 3, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 3, 7, memory[_pen_outline_color])
+		writeStroke(5, 0, 8, 7, memory[_pen_outline_color])
+		writeStroke(4, 1, 4, 6, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(6, 1, 7, 5, memory[_pen_color])
+		writeStroke(3, 2, 3, 3, memory[_pen_color])
+		writeStroke(5, 2, 5, 3, memory[_pen_color])
+		writeStroke(4, 3, 4, 4, memory[_pen_color])
+		writeDot(3, 3, memory[_pen_color])
 		writeSpaceInternal(10)
 
 def writeN()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 7, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 7, 2, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 7, 7, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(5, 1, 6, 5, memory[_PEN_COLOR])
-		writeStroke(3, 2, 3, 3, memory[_PEN_COLOR])
-		writeStroke(4, 3, 4, 4, memory[_PEN_COLOR])
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 7, 6, memory[_pen_outline_color])
+		writeStroke(0, 7, 2, 7, memory[_pen_outline_color])
+		writeStroke(4, 7, 7, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(5, 1, 6, 5, memory[_pen_color])
+		writeStroke(3, 2, 3, 3, memory[_pen_color])
+		writeStroke(4, 3, 4, 4, memory[_pen_color])
 		writeSpaceInternal(9)
 
 def writeO()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 2, y, x + 2, y + 4, color)
 		drawPixel(x + 1, y, color)
 		drawPixel(x + 1, y + 4, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 5, memory[_PEN_COLOR])
-		writeStroke(4, 1, 5, 5, memory[_PEN_COLOR])
-		writeDot(3, 1, memory[_PEN_COLOR])
-		writeDot(3, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 1, memory[_pen_color])
+		writeDot(3, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeP()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 2, y, x + 2, y + 2, color)
 		drawPixel(x + 1, y, color)
@@ -207,31 +207,31 @@ def writeP()
 		writeSpaceInternal(4)
 
 def writeR()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 4, color)
 		drawLine(x + 2, y, x + 2, y + 1, color)
 		drawLine(x + 2, y + 3, x + 2, y + 4, color)
 		drawPixel(x + 1, y, color)
 		drawPixel(x + 1, y + 2, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(0, 7, 2, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(4, 7, 6, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 5, 5, memory[_PEN_COLOR])
-		writeDot(3, 2, memory[_PEN_OUTLINE_COLOR])
-		writeDot(5, 3, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(3, 4, 3, 6, memory[_PEN_OUTLINE_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 6, memory[_pen_outline_color])
+		writeStroke(0, 7, 2, 7, memory[_pen_outline_color])
+		writeStroke(4, 7, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 2, memory[_pen_outline_color])
+		writeDot(5, 3, memory[_pen_outline_color])
+		writeStroke(3, 4, 3, 6, memory[_pen_outline_color])
 		writeSpaceInternal(8)
 
 def writeS()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 2, color)
 		drawLine(x + 2, y + 2, x + 2, y + 4, color)
 		drawLine(x + 1, y, x + 2, y, color)
@@ -240,47 +240,47 @@ def writeS()
 		writeSpaceInternal(4)
 
 def writeT()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x + 2, y, color)
 		drawLine(x + 1, y + 1, x + 1, y + 4, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 7, 3, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(2, 4, 5, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 6, 1, memory[_PEN_COLOR])
-		writeStroke(3, 2, 4, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 7, 3, memory[_pen_outline_color])
+		writeStroke(2, 4, 5, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 6, 1, memory[_pen_color])
+		writeStroke(3, 2, 4, 5, memory[_pen_color])
 		writeSpaceInternal(9)
 
 def writeV()
-	x -> memory[_PEN_X]
-	y -> memory[_PEN_Y]
-	color -> memory[_PEN_COLOR]
-	if memory[_PEN_FONT] = PEN_FONT_SMALL
+	x -> memory[_pen_x]
+	y -> memory[_pen_y]
+	color -> memory[_pen_color]
+	if memory[_pen_font] = PEN_FONT_SMALL
 		drawLine(x, y, x, y + 3, color)
 		drawLine(x + 2, y, x + 2, y + 3, color)
 		drawLine(x + 1, y + 3, x + 1, y + 4, color)
 		writeSpaceInternal(4)
-	if memory[_PEN_FONT] = PEN_FONT_BIG
-		writeStroke(0, 0, 6, 5, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 6, 5, 6, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(2, 7, 4, 7, memory[_PEN_OUTLINE_COLOR])
-		writeStroke(1, 1, 2, 3, memory[_PEN_COLOR])
-		writeStroke(4, 1, 5, 3, memory[_PEN_COLOR])
-		writeStroke(2, 4, 4, 4, memory[_PEN_COLOR])
-		writeDot(3, 5, memory[_PEN_COLOR])
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 5, memory[_pen_outline_color])
+		writeStroke(1, 6, 5, 6, memory[_pen_outline_color])
+		writeStroke(2, 7, 4, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 3, memory[_pen_color])
+		writeStroke(4, 1, 5, 3, memory[_pen_color])
+		writeStroke(2, 4, 4, 4, memory[_pen_color])
+		writeDot(3, 5, memory[_pen_color])
 		writeSpaceInternal(8)
 
 def writeDot(x, y, color)
-	drawPixel(memory[_PEN_X] + x, memory[_PEN_Y] + y, color)
+	drawPixel(memory[_pen_x] + x, memory[_pen_y] + y, color)
 
 def writeStroke(fromX, fromY, toX, toY, color)
-	drawRect(memory[_PEN_X] + fromX, memory[_PEN_Y] + fromY, toX - fromX + 1, toY - fromY + 1, color)
+	drawRect(memory[_pen_x] + fromX, memory[_pen_y] + fromY, toX - fromX + 1, toY - fromY + 1, color)
 
 def writeSpace()
 	writeSpaceInternal(2)
 
 def writeSpaceInternal(space)
-	memory[_PEN_X] -> memory[_PEN_X] + space
+	memory[_pen_x] -> memory[_pen_x] + space
