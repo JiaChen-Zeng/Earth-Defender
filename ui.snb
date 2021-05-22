@@ -128,7 +128,7 @@ def drawTowerSelector()
 	drawPixel(x - 2, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
 	drawPixel(x + 2, TOWER_SELECTOR_Y + 2, TOWER_SELECTOR_COLOR)
 
-const SPACE_HINT_X -> 12
+const SPACE_HINT_X -> 14
 const SPACE_HINT_Y -> SCREEN_HEIGHT / 2 + 16
 const SPACE_HINT_COLOR_NORMAL -> 777777
 const SPACE_HINT_COLOR_LIGHT -> 979764
@@ -136,6 +136,7 @@ const SPACE_HINT_COLOR_RATE -> 10
 memory[_spaceHintColor] -> SPACE_HINT_COLOR_NORMAL
 def writeSpaceHint()
 	penAt(SPACE_HINT_X, SPACE_HINT_Y)
+	penFont(PEN_FONT_SMALL)
 	memory[_spaceHintTime] -> remainder(memory[_spaceHintTime] + 1, SPACE_HINT_COLOR_RATE)
 	if memory[_spaceHintTime] = 0
 		memory[_spaceHintColor] -> cond(memory[_spaceHintColor] = SPACE_HINT_COLOR_NORMAL, SPACE_HINT_COLOR_LIGHT, SPACE_HINT_COLOR_NORMAL)
@@ -161,12 +162,42 @@ def writeSpaceHint()
 	writeR()
 	writeT()
 
-const GAME_OVER_X -> 30
-const GAME_OVER_Y -> SCREEN_HEIGHT / 2 - 6
-const GAME_OVER_COLOR -> 000000
+const TITLE_COLOR -> 999999
+const TITLE_OUTLINE_COLOR -> 000000
+
+const GAME_TITLE_X -> 13
+const GAME_TITLE_Y -> SCREEN_HEIGHT / 2 - 20
+const GAME_TITLE_SECOND_X -> GAME_TITLE_X + 11
+const GAME_TITLE_SECOND_Y -> GAME_TITLE_Y + 11
+def writeGameTitle()
+	penColor(TITLE_COLOR)
+	penOutlineColor(TITLE_OUTLINE_COLOR)
+	penFont(PEN_FONT_BIG)
+
+	penAt(GAME_TITLE_X, GAME_TITLE_Y)
+	writeE()
+	writeA()
+	writeR()
+	writeT()
+	writeH()
+
+	penAt(GAME_TITLE_SECOND_X, GAME_TITLE_SECOND_Y)
+	writeD()
+	writeE()
+	writeF()
+	writeE()
+	writeN()
+	writeD()
+	writeE()
+	writeR()
+
+const GAME_OVER_X -> 17
+const GAME_OVER_Y -> SCREEN_HEIGHT / 2 - 10
 def writeGameOver()
 	penAt(GAME_OVER_X, GAME_OVER_Y)
-	penColor(GAME_OVER_COLOR)
+	penColor(TITLE_COLOR)
+	penOutlineColor(TITLE_OUTLINE_COLOR)
+	penFont(PEN_FONT_BIG)
 	writeG()
 	writeA()
 	writeM()
@@ -177,12 +208,14 @@ def writeGameOver()
 	writeE()
 	writeR()
 
-const GAME_CLEAR_X -> 28
-const GAME_CLEAR_Y -> SCREEN_HEIGHT / 2 - 6
+const GAME_CLEAR_X -> 13
+const GAME_CLEAR_Y -> SCREEN_HEIGHT / 2 - 10
 const GAME_CLEAR_COLOR -> 000000
 def writeGameClear()
 	penAt(GAME_CLEAR_X, GAME_CLEAR_Y)
-	penColor(GAME_CLEAR_COLOR)
+	penColor(TITLE_COLOR)
+	penOutlineColor(TITLE_OUTLINE_COLOR)
+	penFont(PEN_FONT_BIG)
 	writeG()
 	writeA()
 	writeM()

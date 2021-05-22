@@ -14,6 +14,8 @@ include "pen.snb"
 const _PEN_X -> _pen_var
 const _PEN_Y -> _PEN_X + 1
 const _PEN_COLOR -> _PEN_Y + 1
+const _PEN_OUTLINE_COLOR -> _PEN_COLOR + 1
+const _PEN_FONT -> _PEN_OUTLINE_COLOR + 1
 
 const _math_var -> _pen_var + 200 # reserve for 200 vars
 const _randomSeed -> _math_var # 1 var

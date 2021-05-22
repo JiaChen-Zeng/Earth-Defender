@@ -280,6 +280,7 @@ def draw()
 	drawTowers()
 	drawUltimateIcon()
 	if memory[_state] = STATE_INITIAL
+		writeGameTitle()
 		writeSpaceHint()
 
 	if memory[_state] = STATE_READY
