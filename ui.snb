@@ -240,13 +240,13 @@ def writeWaveNotice()
 
 	penAt(WAVE_NOTICE_X, WAVE_NOTICE_Y)
 	penColor(WAVE_NOTICE_NUMBER_COLOR)
-	if (memory[_waveNumber]) = WAVE_NOTICE_NUMBER_COLOR
+	if (memory[_waveNumber]) = ENEMY_WAVE_MAX
 		writeF()
 		writeI()
 		writeN()
 		writeA()
 		writeL()
-	if (memory[_waveNumber]) != WAVE_NOTICE_NUMBER_COLOR
+	if (memory[_waveNumber]) != ENEMY_WAVE_MAX
 		writeNumber(memory[_waveNumber])
 		writeSpace()
 		penColor(TITLE_COLOR)
