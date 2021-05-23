@@ -52,8 +52,6 @@ def writeC()
 		writeSpaceInternal(8)
 
 def writeD()
-	x -> memory[_pen_x]
-	y -> memory[_pen_y]
 	color -> memory[_pen_color]
 	if memory[_pen_font] = PEN_FONT_BIG
 		writeStroke(0, 0, 5, 7, memory[_pen_outline_color])
@@ -84,8 +82,6 @@ def writeE()
 		writeSpaceInternal(8)
 
 def writeF()
-	x -> memory[_pen_x]
-	y -> memory[_pen_y]
 	if memory[_pen_font] = PEN_FONT_BIG
 		writeStroke(0, 0, 6, 3, memory[_pen_outline_color])
 		writeStroke(0, 4, 5, 5, memory[_pen_outline_color])
@@ -126,6 +122,14 @@ def writeH()
 		writeDot(3, 3, memory[_pen_color])
 		writeSpaceInternal(8)
 
+def writeI()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 3, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeSpaceInternal(5)
+
 def writeL()
 	x -> memory[_pen_x]
 	y -> memory[_pen_y]
@@ -165,8 +169,6 @@ def writeM()
 		writeSpaceInternal(10)
 
 def writeN()
-	x -> memory[_pen_x]
-	y -> memory[_pen_y]
 	if memory[_pen_font] = PEN_FONT_BIG
 		writeStroke(0, 0, 7, 6, memory[_pen_outline_color])
 		writeStroke(0, 7, 2, 7, memory[_pen_outline_color])
@@ -238,6 +240,12 @@ def writeS()
 		drawLine(x, y + 4, x + 1, y + 4, color)
 		drawPixel(x + 1, y + 2, color)
 		writeSpaceInternal(4)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(3, 2, 5, 2, memory[_pen_outline_color])
+		writeStroke(1, 4, 3, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
 
 def writeT()
 	x -> memory[_pen_x]
@@ -272,6 +280,151 @@ def writeV()
 		writeStroke(2, 4, 4, 4, memory[_pen_color])
 		writeDot(3, 5, memory[_pen_color])
 		writeSpaceInternal(8)
+
+def writeW()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 3, 7, memory[_pen_outline_color])
+		writeStroke(5, 0, 8, 7, memory[_pen_outline_color])
+		writeStroke(4, 1, 4, 6, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeStroke(6, 1, 7, 5, memory[_pen_color])
+		writeStroke(3, 3, 3, 4, memory[_pen_color])
+		writeStroke(5, 3, 5, 4, memory[_pen_color])
+		writeStroke(4, 2, 4, 3, memory[_pen_color])
+		writeDot(3, 3, memory[_pen_color])
+		writeSpaceInternal(10)
+
+def write0()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(3, 2, 3, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def write1()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 3, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 5, memory[_pen_color])
+		writeSpaceInternal(5)
+
+def write2()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(1, 2, 3, 2, memory[_pen_outline_color])
+		writeStroke(3, 4, 5, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def write3()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 2, memory[_pen_outline_color])
+		writeStroke(0, 4, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 3, 6, 3, memory[_pen_outline_color])
+		writeStroke(1, 1, 3, 1, memory[_pen_color])
+		writeStroke(1, 5, 3, 5, memory[_pen_color])
+		writeStroke(2, 3, 3, 3, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeSpaceInternal(8)
+
+def write4()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 5, memory[_pen_outline_color])
+		writeStroke(3, 6, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 2, 3, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 3, memory[_pen_color])
+		writeSpaceInternal(8)
+
+def write5()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(3, 2, 5, 2, memory[_pen_outline_color])
+		writeStroke(1, 4, 3, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def write6()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(3, 2, 5, 2, memory[_pen_outline_color])
+		writeDot(3, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def write7()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 3, memory[_pen_outline_color])
+		writeStroke(3, 4, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 3, 1, memory[_pen_color])
+		writeStroke(4, 1, 5, 5, memory[_pen_color])
+		writeSpaceInternal(8)
+
+def write8()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeDot(3, 2, memory[_pen_outline_color])
+		writeDot(3, 4, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def write9()
+	if memory[_pen_font] = PEN_FONT_SMALL
+		throwError(ERROR_NOT_IMPLEMENTED)
+	if memory[_pen_font] = PEN_FONT_BIG
+		writeStroke(0, 0, 6, 7, memory[_pen_outline_color])
+		writeStroke(1, 1, 5, 5, memory[_pen_color])
+		writeStroke(1, 4, 3, 4, memory[_pen_outline_color])
+		writeDot(3, 2, memory[_pen_outline_color])
+		writeSpaceInternal(8)
+
+def writeNumber(number)
+	if or(number < 0, 100 <= number)
+		throwError(ERROR_NOT_IMPLEMENTED)
+	writeDigit(number / 10)
+	writeDigit(remainder(number, 10))
+
+def writeDigit(digit)
+	if digit = 0
+		write0()
+	if digit = 1
+		write1()
+	if digit = 2
+		write2()
+	if digit = 3
+		write3()
+	if digit = 4
+		write4()
+	if digit = 5
+		write5()
+	if digit = 6
+		write6()
+	if digit = 7
+		write7()
+	if digit = 8
+		write8()
+	if digit = 9
+		write9()
+
 
 def writeDot(x, y, color)
 	drawPixel(memory[_pen_x] + x, memory[_pen_y] + y, color)

@@ -35,6 +35,8 @@ const ULTIMATE_DAMAGE_RATE -> 30
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
 const ENEMY_LIFE_TOTAL_INCREMENT -> 25
 const ENEMY_LIFE_TOTAL_MAX -> 50 * LANE_COUNT
+const ENEMY_WAVE_MAX -> (ENEMY_LIFE_TOTAL_MAX - ENEMY_LIFE_TOTAL_INITIAL) / ENEMY_LIFE_TOTAL_INCREMENT + 1
+const WAVE_NOTICE_TIME -> 120
 
 # light -> dark
 # blue -> green -> orange -> red -> purple
@@ -65,26 +67,29 @@ def update()
 
 	if memory[_state] = STATE_INITIAL
 		random(1) # for random seed
-		if keyPressed(KEY_SPACE)
+		if keyPressed(KEY_SPACE, false)
 			enterReady()
 			playGameStartSound()
 
 	if memory[_state] = STATE_READY
 		random(1) # for random seed
-		if keyPressed(KEY_LEFT)
-			memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
-		if keyPressed(KEY_RIGHT)
-			memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT)
-		handleTowerLevelAndUltimateChange()
-		if keyPressed(KEY_SPACE)
-			exists -> anyTowerExists()
-			if exists
-				memory[_stateToEnter] -> STATE_BATTLE
-			if exists = false
-				playInvalidActionSound()
+		memory[_waveNoticeTime] -> min(memory[_waveNoticeTime] + 1, WAVE_NOTICE_TIME)
+		if WAVE_NOTICE_TIME <= memory[_waveNoticeTime]
+			if keyPressed(KEY_LEFT, true)
+				memory[_selectedTowerIndex] -> max(memory[_selectedTowerIndex] - 1, 0)
+			if keyPressed(KEY_RIGHT, true)
+				memory[_selectedTowerIndex] -> min(memory[_selectedTowerIndex] + 1, LANE_COUNT)
+			handleTowerLevelAndUltimateChange()
+			if keyPressed(KEY_SPACE, false)
+				exists -> anyTowerExists()
+				if exists
+					memory[_stateToEnter] -> STATE_BATTLE
+
+				if exists = false
+					playInvalidActionSound()
 
 	if memory[_state] = STATE_BATTLE
-		if keyPressed(KEY_SPACE)
+		if keyPressed(KEY_SPACE, false)
 			if memory[_ultimateAvailable]
 				useUltimate()
 			if memory[_ultimateAvailable] = false
@@ -99,12 +104,12 @@ def update()
 		handleBattleStateTransition()
 	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
 		updateBullets()
-		if keyPressed(KEY_SPACE)
+		if keyPressed(KEY_SPACE, false)
 			enterInitial()
 			enterReady()
 
 def handleTowerLevelAndUltimateChange()
-	if keyPressed(KEY_UP)
+	if keyPressed(KEY_UP, true)
 		if memory[_selectedTowerIndex] = ULTIMATE_INDEX
 			canBuyUltimate -> and(ULTIMATE_GOLD <= memory[_gold], memory[_ultimateAvailable] = false)
 			if canBuyUltimate
@@ -125,7 +130,7 @@ def handleTowerLevelAndUltimateChange()
 					playInvalidActionSound()
 			if goldEnough = false
 				playInvalidActionSound()
-	if keyPressed(KEY_DOWN)
+	if keyPressed(KEY_DOWN, true)
 		if memory[_selectedTowerIndex] = ULTIMATE_INDEX
 			canSellUltimate -> and((memory[_gold] + ULTIMATE_GOLD) <= GOLD_MAX, memory[_ultimateAvailable])
 			if canSellUltimate
@@ -252,6 +257,7 @@ def handleEnemiesBulletCollision(_bullet)
 
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
+	memory[_waveNumber] -> 0
 	memory[_gold] -> GOLD_INITIAL
 	memory[_ultimateAvailable] -> true
 	memory[_enemyLifeTotal] -> ENEMY_LIFE_TOTAL_INITIAL
@@ -259,6 +265,8 @@ def enterInitial()
 
 def enterReady()
 	memory[_state] -> STATE_READY
+	memory[_waveNumber] -> memory[_waveNumber] + 1
+	memory[_waveNoticeTime] -> 0
 	memory[_selectedTowerIndex] -> 0
 	memory[_enemyLifeTotal] -> min(memory[_enemyLifeTotal] + ENEMY_LIFE_TOTAL_INCREMENT, ENEMY_LIFE_TOTAL_MAX)
 	initPathsAndEnemies()
@@ -281,12 +289,16 @@ def draw()
 	drawTowers()
 	drawUltimateIcon()
 	if memory[_state] = STATE_INITIAL
-		writeGameTitle()
-		writeSpaceHint()
+		if memory[_stateToEnter] = STATE_NULL
+			writeGameTitle()
+			writeSpaceHint()
 
 	if memory[_state] = STATE_READY
-		drawTowerSelector()
 		drawPaths()
+		if memory[_waveNoticeTime] < WAVE_NOTICE_TIME
+			writeWaveNotice()
+		if WAVE_NOTICE_TIME <= memory[_waveNoticeTime]
+			drawTowerSelector()
 
 	if memory[_state] = STATE_BATTLE
 		drawPaths()
@@ -313,8 +325,12 @@ def drawTowers()
 		i -> i + 1
 
 def drawPaths()
+	length -> memory[_paths + Array_length]
+	if memory[_state] = STATE_READY
+		if memory[_waveNoticeTime] < WAVE_NOTICE_TIME
+			length -> length * memory[_waveNoticeTime] / WAVE_NOTICE_TIME
 	i -> 0
-	while i < memory[_paths + Array_length]
+	while i < length
 		Path_draw(Array_at(_paths, i))
 		i -> i + 1
 

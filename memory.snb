@@ -9,6 +9,8 @@ const _stateToEnter -> 7
 const _timeToEnterState -> 8
 const _skyX -> 9
 const _skyTime -> 10
+const _waveNumber -> 11
+const _waveNoticeTime -> 12
 
 const _towerSpeed -> 1000 									# 1000 ~ 1009	#10
 const _colors -> _towerSpeed + 10 							# 1010 ~ 1019	#10

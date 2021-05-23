@@ -64,9 +64,9 @@ def setMemory(_start, length, value)
 
 const KEY_DOWN_TIME_AS_PRESS -> 20
 const KEY_DOWN_INTERVAL_AS_PRESS -> 10
-def keyPressed(key)
+def keyPressed(key, longPress)
 	# Count long key down as key press
-	if and(memory[_keyPressedInternal + key - _key_begin], memory[key])
+	if and(longPress, and(memory[_keyPressedInternal + key - _key_begin], memory[key]))
 		memory[_keyDownTime] -> memory[_keyDownTime] + 1
 		# Reset timer partially by long key down interval
 		if (KEY_DOWN_TIME_AS_PRESS + KEY_DOWN_INTERVAL_AS_PRESS) <= memory[_keyDownTime]
@@ -75,7 +75,7 @@ def keyPressed(key)
 	if or(and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key]), and(memory[_keyPressedInternal + key - _key_begin], memory[key] = false))
 		memory[_keyDownTime] -> 0
 	# First key down, or at long key down interval, is key press
-	out -> or(and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key]), and(memory[_keyPressedInternal + key - _key_begin], KEY_DOWN_TIME_AS_PRESS = memory[_keyDownTime]))
+	out -> or(and(memory[_keyPressedInternal + key - _key_begin] = false, memory[key]), and(longPress, and(memory[_keyPressedInternal + key - _key_begin], KEY_DOWN_TIME_AS_PRESS = memory[_keyDownTime])))
 	memory[_keyPressedInternal + key - _key_begin] -> memory[key]
 
 def playSound(channel, frequency, attenuation, volume)

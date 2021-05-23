@@ -59,6 +59,8 @@ def getSkyColor()
 		if memory[_state] = STATE_GAME_CLEAR
 			out -> BACKGROUND_SKY_GAME_CLEAR_COLOR
 	if memory[_stateToEnter] = STATE_READY
+		if memory[_state] = STATE_INITIAL
+			out -> BACKGROUND_SKY_NORMAL_COLOR
 		if memory[_state] = STATE_BATTLE
 			out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_NORMAL_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 		if memory[_state] = STATE_GAME_CLEAR
@@ -71,7 +73,7 @@ def getSkyColor()
 		out -> getTransitionedColor(BACKGROUND_SKY_BATTLE_COLOR, BACKGROUND_SKY_GAME_CLEAR_COLOR, memory[_timeToEnterState], TIME_TO_ENTER_STATE - 1)
 
 const GOLD_BAR_X -> SCREEN_WIDTH - 8
-const GOLD_BAR_Y -> 30
+const GOLD_BAR_Y -> 35
 const GOLD_BAR_WIDTH -> 8
 const GOLD_BAR_HEIGHT -> 38
 const GOLD_BAR_COLOR -> 706725 # rgb(181, 173, 65)
@@ -226,6 +228,49 @@ def writeGameClear()
 	writeE()
 	writeA()
 	writeR()
+
+const WAVE_NOTICE_X -> 10
+const WAVE_NOTICE_Y -> SCREEN_HEIGHT / 2 - 10
+const WAVE_NOTICE_SECOND_X -> WAVE_NOTICE_X
+const WAVE_NOTICE_SECOND_Y -> WAVE_NOTICE_Y + 10
+const WAVE_NOTICE_NUMBER_COLOR -> 883647
+def writeWaveNotice()
+	penOutlineColor(TITLE_OUTLINE_COLOR)
+	penFont(PEN_FONT_BIG)
+
+	penAt(WAVE_NOTICE_X, WAVE_NOTICE_Y)
+	penColor(WAVE_NOTICE_NUMBER_COLOR)
+	if (memory[_waveNumber]) = WAVE_NOTICE_NUMBER_COLOR
+		writeF()
+		writeI()
+		writeN()
+		writeA()
+		writeL()
+	if (memory[_waveNumber]) != WAVE_NOTICE_NUMBER_COLOR
+		writeNumber(memory[_waveNumber])
+		writeSpace()
+		penColor(TITLE_COLOR)
+		writeO()
+		writeF()
+		writeSpace()
+		penColor(WAVE_NOTICE_NUMBER_COLOR)
+		writeNumber(ENEMY_WAVE_MAX)
+	writeSpace()
+	penColor(TITLE_COLOR)
+	writeW()
+	writeA()
+	writeV()
+	writeE()
+
+	penAt(WAVE_NOTICE_SECOND_X, WAVE_NOTICE_SECOND_Y)
+	writeD()
+	writeE()
+	writeT()
+	writeE()
+	writeC()
+	writeT()
+	writeE()
+	writeD()
 
 def yAcrossGoldIndicator(y)
 	out -> and(GOLD_BAR_Y <= y, y <= (GOLD_BAR_Y + GOLD_BAR_HEIGHT))
