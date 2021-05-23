@@ -8,7 +8,7 @@ const Path_toLane -> 5
 const Path_fromSpot -> 6
 const Path_toSpot -> 7
 
-const PATH_COLOR -> 576769
+const PATH_COLOR -> 729392 # rgb(187, 240, 237)
 const PATH_ARROW_ANGLE -> PI / 5
 const PATH_ARROW_LENGTH -> 6
 
