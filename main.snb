@@ -157,7 +157,10 @@ def handleBattleStateTransition()
 		if memory[_enemyLifeTotal] = ENEMY_LIFE_TOTAL_MAX
 			memory[_stateToEnter] -> STATE_GAME_CLEAR
 		if memory[_enemyLifeTotal] != ENEMY_LIFE_TOTAL_MAX
-			if anyTowerExists() = false
+			towerExists -> anyTowerExists()
+			if towerExists
+				memory[_stateToEnter] -> STATE_READY
+			if towerExists = false
 				i -> 0
 				while i < GOLD_NO_TOWER_PENALTY
 					memory[_gold] -> max(memory[_gold] - 1, 0)
@@ -165,10 +168,8 @@ def handleBattleStateTransition()
 					draw()
 					sleep(20)
 					i -> i + 1
-			if 0 < memory[_gold]
-				memory[_stateToEnter] -> STATE_READY
-			if memory[_gold] <= 0
-				memory[_stateToEnter] -> STATE_GAME_OVER
+				if memory[_gold] <= 0
+					memory[_stateToEnter] -> STATE_GAME_OVER
 
 def tickToEnterState()
 	if memory[_stateToEnter]
