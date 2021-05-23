@@ -3,7 +3,8 @@ include "games/sound.snb"
 
 #===================playground======================
 
-
+testSound()
+sleep(120)
 
 #================interpreter comparison bug================
 

@@ -107,6 +107,7 @@ def update()
 		if keyPressed(KEY_SPACE, false)
 			init()
 			memory[_stateToEnter] -> STATE_READY
+			playGameStartSound()
 
 def handleTowerLevelAndUltimateChange()
 	if keyPressed(KEY_UP, true)
@@ -278,8 +279,7 @@ def enterGameOver()
 
 def enterGameClear()
 	memory[_state] -> STATE_GAME_CLEAR
-	# TODO: playGameClearSound()
-	# TODO: Better font
+	playGameClearSound()
 
 def draw()
 	drawBackground()
@@ -305,7 +305,6 @@ def draw()
 
 	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
 		if memory[_stateToEnter] = STATE_NULL
-			drawBullets()
 			if memory[_state] = STATE_GAME_OVER
 				writeGameOver()
 			if memory[_state] = STATE_GAME_CLEAR
