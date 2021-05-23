@@ -105,8 +105,8 @@ def update()
 	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
 		updateBullets()
 		if keyPressed(KEY_SPACE, false)
-			enterInitial()
-			enterReady()
+			init()
+			memory[_stateToEnter] -> STATE_READY
 
 def handleTowerLevelAndUltimateChange()
 	if keyPressed(KEY_UP, true)
@@ -258,11 +258,7 @@ def handleEnemiesBulletCollision(_bullet)
 
 def enterInitial()
 	memory[_state] -> STATE_INITIAL
-	memory[_waveNumber] -> 0
-	memory[_gold] -> GOLD_INITIAL
-	memory[_ultimateAvailable] -> true
-	memory[_enemyLifeTotal] -> ENEMY_LIFE_TOTAL_INITIAL
-	initTowers()
+	init()
 
 def enterReady()
 	memory[_state] -> STATE_READY
@@ -302,17 +298,19 @@ def draw()
 			drawTowerSelector()
 
 	if memory[_state] = STATE_BATTLE
-		drawPaths()
+		if memory[_stateToEnter] = STATE_NULL
+			drawPaths()
 		drawEnemies()
 		drawBullets()
 
 	if or(memory[_state] = STATE_GAME_OVER, memory[_state] = STATE_GAME_CLEAR)
-		drawBullets()
-		if memory[_state] = STATE_GAME_OVER
-			writeGameOver()
-		if memory[_state] = STATE_GAME_CLEAR
-			writeGameClear()
-		writeSpaceHint()
+		if memory[_stateToEnter] = STATE_NULL
+			drawBullets()
+			if memory[_state] = STATE_GAME_OVER
+				writeGameOver()
+			if memory[_state] = STATE_GAME_CLEAR
+				writeGameClear()
+			writeSpaceHint()
 
 	drawUI()
 
@@ -355,6 +353,13 @@ def drawUltimate(y)
 	drawLine(0, y, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y) * GOLD_BAR_WIDTH), y, ULTIMATE_COLOR_BEAM_BORDER)
 	drawLine(0, y + 1, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y + 1) * GOLD_BAR_WIDTH), y + 1, ULTIMATE_COLOR_BEAM_MAIN)
 	drawLine(0, y + 2, SCREEN_WIDTH - 1 - (yAcrossGoldIndicator(y + 2) * GOLD_BAR_WIDTH), y + 2, ULTIMATE_COLOR_BEAM_BORDER)
+
+def init()
+	memory[_waveNumber] -> 0
+	memory[_gold] -> GOLD_INITIAL
+	memory[_ultimateAvailable] -> true
+	memory[_enemyLifeTotal] -> ENEMY_LIFE_TOTAL_INITIAL
+	initTowers()
 
 def initTowers()
 	Array(_towers, LANE_COUNT, Tower_size)
