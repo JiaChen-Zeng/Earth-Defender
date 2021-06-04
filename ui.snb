@@ -266,7 +266,7 @@ def writeGameClear()
 	writeA()
 	writeR()
 
-const WAVE_NOTICE_X -> 10
+const WAVE_NOTICE_X -> 6
 const WAVE_NOTICE_Y -> SCREEN_HEIGHT / 2 - 10
 const WAVE_NOTICE_SECOND_X -> WAVE_NOTICE_X
 const WAVE_NOTICE_SECOND_Y -> WAVE_NOTICE_Y + 10
