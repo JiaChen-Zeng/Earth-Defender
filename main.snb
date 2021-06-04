@@ -171,6 +171,8 @@ def handleBattleStateTransition()
 					i -> i + 1
 				if memory[_gold] <= 0
 					memory[_stateToEnter] -> STATE_GAME_OVER
+				if 0 < memory[_gold]
+					memory[_stateToEnter] -> STATE_READY
 
 def tickToEnterState()
 	if memory[_stateToEnter]
