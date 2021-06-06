@@ -40,19 +40,16 @@ const BACKGROUND_SKY_SUN_COLOR -> 979771 # rgb(250, 252, 184)
 def drawSky()
 	drawRect(0, 0, SCREEN_WIDTH, BACKGROUND_GROUND_Y, getSkyColor())
 	stateAlmostToGameClear -> and(memory[_state] != STATE_GAME_CLEAR, and(memory[_stateToEnter] = STATE_GAME_CLEAR, (TIME_TO_ENTER_STATE / 2) < memory[_timeToEnterState]))
-	# debug(stateAlmostToGameClear)
 	stateNotFarFromGameClear -> and(memory[_state] = STATE_GAME_CLEAR, and(memory[_stateToEnter] != STATE_NULL, memory[_timeToEnterState] < (TIME_TO_ENTER_STATE / 2)))
-	# debug2(stateNotFarFromGameClear)
 	stateExactlyGameClear -> and(memory[_state] = STATE_GAME_CLEAR, memory[_stateToEnter] = STATE_NULL)
 	stateNearGameClear -> or(stateExactlyGameClear, or(stateAlmostToGameClear, stateNotFarFromGameClear))
-	# flush()
 	if stateNearGameClear
 		drawCircle(BACKGROUND_SKY_SUN_X, BACKGROUND_SKY_SUN_Y, BACKGROUND_SKY_SUN_RADIUS, BACKGROUND_SKY_SUN_COLOR)
 	if stateNearGameClear = false
 		drawDots(memory[_skyX], 0, _backgroundStars, BACKGROUND_SKY_STAR_COUNT, BACKGROUND_SKY_STAR_COLOR)
 
 def getSkyColor()
-	out -> 0
+	out -> BACKGROUND_SKY_NORMAL_COLOR
 	if memory[_stateToEnter] = STATE_NULL
 		out -> BACKGROUND_SKY_NORMAL_COLOR
 		if memory[_state] = STATE_BATTLE

@@ -30,6 +30,7 @@ const GOLD_NO_TOWER_PENALTY -> 3
 
 const ULTIMATE_GOLD -> 3
 const ULTIMATE_INDEX -> LANE_COUNT
+const ULTIMATE_DAMAGE_BASE -> 1
 const ULTIMATE_DAMAGE_RATE -> 30
 
 const ENEMY_LIFE_TOTAL_INITIAL -> -10
@@ -411,7 +412,7 @@ def getUltimateDamage()
 	while i < LANE_COUNT
 		level -> level + memory[Array_at(_towers, i) + Tower_level]
 		i -> i + 1
-	out -> level / ULTIMATE_DAMAGE_RATE + 1
+	out -> level / ULTIMATE_DAMAGE_RATE + ULTIMATE_DAMAGE_BASE
 
 const ULTIMATE_Y -> TOWER_Y - 3
 def useUltimate()
