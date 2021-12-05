@@ -1,6 +1,6 @@
 # Earth Defender
 
-インタラクティブインターフェース演習のゲームプログラミング課題。作者は学籍番号1DS19439Y、曽 佳宸。
+インタラクティブインターフェース演習のゲームプログラミング課題。[デモリールはこちらまで。](https://blog.zeng.games/portfolio/earth-defender/)
 
 ## 世界観
 
